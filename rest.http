@@ -1,0 +1,17 @@
+GET http://localhost:8080/userlist
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/user?id=58cc127c-7ffb-4f1f-badf-cabc4c9bb0a3
+Content-Type: application/json
+
+###
+
+POST http://localhost:8080/createuser
+Content-Type: application/json
+
+{
+    "Name": "Eduardo Spek",
+    "Zap": "71 99622-9991"
+}

@@ -13,9 +13,14 @@ func NewUserInteractor(repository entity.UserRepository) *UserInteractor {
 }
 
 func (interactor *UserInteractor) Create(user entity.User) error {
-	return interactor.UserRepository.Create(user)
+	newuser := entity.NewUser(user.Name, user.Zap)
+	return interactor.UserRepository.Create(*newuser)
 }
 
 func (interactor *UserInteractor) GetById(id string) (entity.User, error) {
 	return interactor.UserRepository.GetById(id)
+}
+
+func (interactor *UserInteractor) UserList() ([]entity.User, error) {
+	return interactor.UserRepository.List()
 }

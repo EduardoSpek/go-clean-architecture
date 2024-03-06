@@ -10,6 +10,12 @@ var (
 	UsersMutex sync.Mutex
 )
 
+type UserRepository interface {
+	Create(user User) error
+	GetById(id string) (User, error)
+	List() ([]User, error)
+}
+
 type User struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
@@ -23,9 +29,4 @@ func NewUser(name string, zap string) *User {
 		Zap:  zap,
 	}	
 	return user
-}
-
-type UserRepository interface {
-	Create(user User) error
-	GetById(id string) (User, error)
 }

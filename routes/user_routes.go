@@ -18,7 +18,8 @@ func NewRouter() *Router {
 
 func (r *Router) SetupRouter( usercontroller *controllers.UserController) {
 	r.mux.HandleFunc("/createuser", usercontroller.CreateUser).Methods("POST")
-	r.mux.HandleFunc("/user/:id", usercontroller.GetUser).Methods("GET")
+	r.mux.HandleFunc("/user", usercontroller.GetUser).Methods("GET")
+	r.mux.HandleFunc("/userlist", usercontroller.UserList).Methods("GET")
 }
 
 func (r *Router) Start(port string) {

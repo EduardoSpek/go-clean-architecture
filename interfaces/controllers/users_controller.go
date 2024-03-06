@@ -9,18 +9,18 @@ import (
 )
 
 type UserController struct {
-	Interactor usecase.UserInteractor
+	UserInteractor usecase.UserInteractor
 }
 
-func NewUserController(interactor usecase.UserInteractor) *UserController {
-	return &UserController{ Interactor: interactor }
+func NewUserController(userinteractor usecase.UserInteractor) *UserController {
+	return &UserController{ UserInteractor: userinteractor }
 }
 
 func (controller *UserController) CreateUser(w http.ResponseWriter, r *http.Request ) {	
 	var user entity.User
 
 	_ = json.NewDecoder(r.Body).Decode(&user)
-	err := controller.Interactor.Create(user)
+	err := controller.UserInteractor.Create(user)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -32,7 +32,7 @@ func (controller *UserController) CreateUser(w http.ResponseWriter, r *http.Requ
 
 func (controller *UserController) GetUser(w http.ResponseWriter, r *http.Request ) {		
 	id := r.URL.Query().Get("id")
-	user, err := controller.Interactor.GetById(id)	
+	user, err := controller.UserInteractor.GetById(id)	
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
@@ -40,4 +40,15 @@ func (controller *UserController) GetUser(w http.ResponseWriter, r *http.Request
 	}
 	
 	json.NewEncoder(w).Encode(user)
+}
+
+func (controller *UserController) UserList(w http.ResponseWriter, r *http.Request ) {			
+	users, err := controller.UserInteractor.UserList()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return 
+	}
+	
+	json.NewEncoder(w).Encode(users)
 }

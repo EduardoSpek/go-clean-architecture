@@ -26,3 +26,16 @@ func (repo *UserMemoryRepository) GetById(id string) (entity.User, error) {
 	return entity.User{}, errors.New("User not found")
 }
 
+func (repo *UserMemoryRepository) List() ([]entity.User, error) {
+	
+	if len(repo.users) <= 0 {
+		return []entity.User{}, errors.New("The list is null")
+	}
+
+    usersSlice := make([]entity.User, 0, len(repo.users))
+    for _, user := range repo.users {
+        usersSlice = append(usersSlice, user)
+    }
+	
+	return usersSlice, nil
+}
