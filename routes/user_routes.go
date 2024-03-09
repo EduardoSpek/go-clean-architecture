@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -18,10 +19,14 @@ func NewRouter() *Router {
 
 func (r *Router) SetupRouter( usercontroller *controllers.UserController) {
 	r.mux.HandleFunc("/createuser", usercontroller.CreateUser).Methods("POST")
-	r.mux.HandleFunc("/user", usercontroller.GetUser).Methods("GET")
 	r.mux.HandleFunc("/userlist", usercontroller.UserList).Methods("GET")
+	r.mux.HandleFunc("/user", usercontroller.UpdateUser).Methods("PATCH")
+	r.mux.HandleFunc("/user", usercontroller.GetUser).Methods("GET")
+	r.mux.HandleFunc("/user", usercontroller.DeleteUser).Methods("DELETE")
+	
 }
 
 func (r *Router) Start(port string) {
-	log.Fatal(http.ListenAndServe(port, r.mux))
+	fmt.Println("O Servidor foi iniciado na porta "+ port)
+	log.Fatal(http.ListenAndServe(port, r.mux))	
 }
