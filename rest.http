@@ -3,7 +3,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/user?id=39e8576a-0115-4e9d-8b67-4d864a5aa565
+GET http://localhost:8080/user/ad33ef87-5fc3-4ac0-8669-344ac4e803c6
 Content-Type: application/json
 
 ###
@@ -12,22 +12,22 @@ POST http://localhost:8080/createuser
 Content-Type: application/json
 
 {
-    "Name": "Boxxx",
-    "Zap": "72 99282-3313"
+    "Name": "Amanda Loira",
+    "Zap": "00 00000-0000"
 }
 
 ###
 
-DELETE http://localhost:8080/user?id=6d43f2e5-0006-4723-80f3-3784ee69153d
+DELETE http://localhost:8080/user/77c8b4e3-dbf5-449f-9ee9-4ca47857b6e1
 Content-Type: application/json
 
 ###
 
-PATCH http://localhost:8080/user
+PUT http://localhost:8080/user
 Content-Type: application/json
 
 {
-    "id": "39e8576a-0115-4e9d-8b67-4d864a5aa565",
-    "Name": "Jéssica N. Amaralina",
-    "Zap": "73 98827-0193"
+    "id": "53edc4c6-302d-4538-8f36-2ded79b64e47",
+    "name": "Amanda Loira",
+    "zap": "71 98882-2101"
 }

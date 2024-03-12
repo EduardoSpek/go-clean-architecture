@@ -6,6 +6,7 @@ import (
 
 	"github.com/eduardospek/go-clean-arquiteture/domain/entity"
 	usecase "github.com/eduardospek/go-clean-arquiteture/usecases"
+	"github.com/gorilla/mux"
 )
 
 type UserController struct {
@@ -20,7 +21,7 @@ func (controller *UserController) CreateUser(w http.ResponseWriter, r *http.Requ
 	var user entity.User
 
 	_ = json.NewDecoder(r.Body).Decode(&user)
-	newuser, err := controller.UserInteractor.Create(user)
+	newuser, err := controller.UserInteractor.CreateNewUser(user)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -33,18 +34,20 @@ func (controller *UserController) UpdateUser(w http.ResponseWriter, r *http.Requ
 	var user entity.User
 
 	_ = json.NewDecoder(r.Body).Decode(&user)
-	err := controller.UserInteractor.Update(user)
+	UpdateUser, err := controller.UserInteractor.UpdateUser(user)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return 
 	}
 	
-	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(UpdateUser)
 }
 
-func (controller *UserController) GetUser(w http.ResponseWriter, r *http.Request ) {		
-	id := r.URL.Query().Get("id")
+func (controller *UserController) GetUser(w http.ResponseWriter, r *http.Request ) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	
 	user, err := controller.UserInteractor.GetById(id)	
 
 	if err != nil {
@@ -67,8 +70,10 @@ func (controller *UserController) UserList(w http.ResponseWriter, r *http.Reques
 }
 
 func (controller *UserController) DeleteUser(w http.ResponseWriter, r *http.Request ) {			
-	id := r.URL.Query().Get("id")
-	err := controller.UserInteractor.Delete(id)
+	vars := mux.Vars(r)
+	id := vars["id"]
+	
+	err := controller.UserInteractor.DeleteUser(id)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)

@@ -9,6 +9,12 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+var (
+    PathFileDatabase = "./agenda.db"
+	ErrUserExists = errors.New("Usuário já cadastrado com este nome")	
+    ErrUserNotExistsWithID = errors.New("Não existe usuário com este ID")
+)
+
 type UserSQLiteRepository struct {}
 
 func NewUserSQLiteRepository() *UserSQLiteRepository {
@@ -18,7 +24,7 @@ func NewUserSQLiteRepository() *UserSQLiteRepository {
 }
 
 func (repo *UserSQLiteRepository) Connect() (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", "./agenda.db")
+	db, err := sql.Open("sqlite3", PathFileDatabase)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -55,7 +61,7 @@ func (repo *UserSQLiteRepository) Create(user entity.User) (entity.User, error) 
 
     UserExists := repo.UserExists(user.Name)
 	if UserExists {
-		return entity.User{}, errors.New("Usuário já cadastrado com este nome")
+		return entity.User{}, ErrUserExists
 	}
  
     insertQuery := "INSERT INTO users (id,  name, zap) VALUES (?, ?, ?)"
@@ -68,19 +74,19 @@ func (repo *UserSQLiteRepository) Create(user entity.User) (entity.User, error) 
     return user, err
 }
 
-func (repo *UserSQLiteRepository) Update(user entity.User) error {    
+func (repo *UserSQLiteRepository) Update(user entity.User) (entity.User, error)  {    
     db, _ := repo.Connect()
 	defer db.Close()
 
     UserExists := repo.UserExists(user.Name)
 	if UserExists {
-		return errors.New("Usuário já cadastrado com este nome")
+		return entity.User{}, ErrUserExists
 	}
     
     _, err := repo.GetById(user.ID)
     if err != nil {
         fmt.Println(err)
-		return err
+		return entity.User{}, err
 	}    
 
     query := "UPDATE users SET"
@@ -99,11 +105,18 @@ func (repo *UserSQLiteRepository) Update(user entity.User) error {
 		_, err := db.Exec(query)
 		if err != nil {
 			fmt.Println(err)
-			return err
+			return entity.User{}, err
 		}	
 	}
 
-    return err
+    updateuser, err := repo.GetById(user.ID)
+
+    if err != nil {
+        fmt.Println(err)
+		return entity.User{}, err
+	}
+
+    return updateuser, err
 }
 
 func (repo *UserSQLiteRepository) GetById(id string) (entity.User, error) {
@@ -126,7 +139,7 @@ func (repo *UserSQLiteRepository) GetById(id string) (entity.User, error) {
     if err != nil {        
         // Se não houver usuário correspondente ao ID fornecido, retornar nil
         if err == sql.ErrNoRows {            
-            return entity.User{}, errors.New("Não existe usuário com este ID")
+            return entity.User{}, ErrUserNotExistsWithID
         }
         // Se ocorrer outro erro, retornar o erro        
         return entity.User{}, err
@@ -147,14 +160,12 @@ func (repo *UserSQLiteRepository) List() ([]entity.User, error) {
 	db, err := repo.Connect()
 	defer db.Close()
 
-	if err != nil {
-        fmt.Printf("Erro ao conectar com o banco de dados")
+	if err != nil {        
 		return nil, err
 	}
     
     rows, err := db.Query("SELECT * FROM users ORDER BY name ASC")
-    if err != nil {
-        fmt.Println("Erro ao selecionar usuarios")
+    if err != nil {        
         return nil, err
     }    
 
@@ -166,8 +177,7 @@ func (repo *UserSQLiteRepository) List() ([]entity.User, error) {
     for rows.Next() {
         var user entity.User
         err := rows.Scan(&user.ID, &user.Name, &user.Zap)
-        if err != nil {
-            fmt.Println("Erro ao listar usuarios")
+        if err != nil {            
             return nil, err
         }
         users = append(users, user)
@@ -181,22 +191,19 @@ func (repo *UserSQLiteRepository) Delete(id string) (error) {
 	db, err := repo.Connect()
 	defer db.Close()
 
-    if err != nil {
-        fmt.Printf("Erro ao conectar com o banco de dados")
+    if err != nil {        
 		return err
 	}
 
     _, err = repo.GetById(id)
 
-    if err != nil {
-        fmt.Printf("Usuário não encontrado")
+    if err != nil {        
 		return err
 	}
 
     _ , err = db.Exec("DELETE FROM users WHERE id = ?", id)
 
-    if err != nil {
-        fmt.Printf("Usuário não encontrado")
+    if err != nil {        
 		return err
 	}
 

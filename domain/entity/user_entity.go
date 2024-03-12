@@ -2,21 +2,24 @@ package entity
 
 import (
 	"errors"
-	"sync"
 
 	"github.com/google/uuid"
 )
 
-var (	
-	UsersMutex sync.Mutex
+var (
+	ErrNameAndZapEmpty = errors.New("Erro: Nome e Whatsapp são necessários")
+	ErrNameEmpty = errors.New("Erro: Nome é necessário")
+	ErrZapEmpty = errors.New("Erro: Whatsapp é necessário")
+	ErrZapLimit = errors.New("Erro: Whatsapp deve ter 13 digitos (Ex: 71 98888-7777)")
 )
 
 type UserRepository interface {
 	Create(user User) (User, error)
-	Update(user User) error
+	Update(user User) (User, error)
 	GetById(id string) (User, error)
 	List() ([]User, error)
 	Delete(id string) (error)
+	UserExists(name string) bool
 }
 
 type User struct {
@@ -42,16 +45,16 @@ func NewUser(name string, zap string) (*User, error) {
 
 func isValid(name string, zap string) error {
 	if name == "" && zap == "" {
-		return errors.New("Erro: Nome e Whatsapp são necessários")
+		return ErrNameAndZapEmpty
 	}
 	if name == "" {
-		return errors.New("Erro: Nome é necessário")
+		return ErrNameEmpty
 	}
 	if zap == "" {
-		return errors.New("Erro: Whatsapp é necessário")
+		return ErrZapEmpty
 	}
 	if len(zap) < 13 {
-		return errors.New("Erro: Whatsapp deve ter 13 digitos (Ex: 71 98888-7777)")
+		return ErrZapLimit
 	}
 
 	return nil
