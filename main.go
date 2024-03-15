@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	sqlite "github.com/eduardospek/go-clean-arquiteture/infra/database/mysql"
+	sqlite "github.com/eduardospek/go-clean-arquiteture/infra/database/sqlite"
 	"github.com/eduardospek/go-clean-arquiteture/interfaces/controllers"
 	"github.com/eduardospek/go-clean-arquiteture/routes"
 	usecase "github.com/eduardospek/go-clean-arquiteture/usecases"
@@ -23,7 +23,7 @@ func main() {
 	LoadEnv()
 
 	//userRepo := memory.NewUserMemoryRepository()
-	userRepo := sqlite.NewUserMysqlRepository()	
+	userRepo := sqlite.NewUserSQLiteRepository()	
 	userInteractor := usecase.NewUserInteractor(userRepo)	
 	userController := controllers.NewUserController(*userInteractor)
 
