@@ -3,7 +3,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/user/ad33ef87-5fc3-4ac0-8669-344ac4e803c6
+GET http://localhost:8080/user/675402bb-51ae-4914-a9cb-d9f1b7237dfa
 Content-Type: application/json
 
 ###
@@ -12,22 +12,21 @@ POST http://localhost:8080/createuser
 Content-Type: application/json
 
 {
-    "Name": "Amanda Loira",
-    "Zap": "00 00000-0000"
+    "Name": "Eduardo Spek",
+    "Zap": "71 99622-9991"
 }
 
 ###
 
-DELETE http://localhost:8080/user/77c8b4e3-dbf5-449f-9ee9-4ca47857b6e1
+DELETE http://localhost:8080/user/675402bb-51ae-4914-a9cb-d9f1b7237dfa
 Content-Type: application/json
 
 ###
 
-PUT http://localhost:8080/user
+PUT http://localhost:8080/user/675402bb-51ae-4914-a9cb-d9f1b7237dfa
 Content-Type: application/json
 
-{
-    "id": "53edc4c6-302d-4538-8f36-2ded79b64e47",
-    "name": "Amanda Loira",
+{    
+    "name": "Amanda Loiras",
     "zap": "71 98882-2101"
 }

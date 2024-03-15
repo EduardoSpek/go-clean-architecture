@@ -4,13 +4,13 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"os"
 
 	"github.com/eduardospek/go-clean-arquiteture/domain/entity"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 var (
-    PathFileDatabase = "./agenda.db"
 	ErrUserExists = errors.New("Usuário já cadastrado com este nome")	
     ErrUserNotExistsWithID = errors.New("Não existe usuário com este ID")
 )
@@ -23,8 +23,8 @@ func NewUserSQLiteRepository() *UserSQLiteRepository {
 	return &UserSQLiteRepository{}
 }
 
-func (repo *UserSQLiteRepository) Connect() (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", PathFileDatabase)
+func (repo *UserSQLiteRepository) Connect() (*sql.DB, error) {    
+	db, err := sql.Open("sqlite3", os.Getenv("PATCH_DB_SQLITE"))
 	if err != nil {
 		fmt.Println(err)
 		return nil, err

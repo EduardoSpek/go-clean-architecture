@@ -20,7 +20,7 @@ func NewRouter() *Router {
 func (r *Router) SetupRouter( usercontroller *controllers.UserController) {
 	r.mux.HandleFunc("/createuser", usercontroller.CreateUser).Methods("POST")
 	r.mux.HandleFunc("/userlist", usercontroller.UserList).Methods("GET")
-	r.mux.HandleFunc("/user", usercontroller.UpdateUser).Methods("PUT")
+	r.mux.HandleFunc("/user/{id}", usercontroller.UpdateUser).Methods("PUT")
 	r.mux.HandleFunc("/user/{id}", usercontroller.GetUser).Methods("GET")
 	r.mux.HandleFunc("/user/{id}", usercontroller.DeleteUser).Methods("DELETE")
 	

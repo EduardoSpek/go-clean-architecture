@@ -31,7 +31,12 @@ func (controller *UserController) CreateUser(w http.ResponseWriter, r *http.Requ
 	json.NewEncoder(w).Encode(newuser)
 }
 func (controller *UserController) UpdateUser(w http.ResponseWriter, r *http.Request ) {	
+	vars := mux.Vars(r)
+	id := vars["id"]
+
 	var user entity.User
+
+	user.ID = id
 
 	_ = json.NewDecoder(r.Body).Decode(&user)
 	UpdateUser, err := controller.UserInteractor.UpdateUser(user)
