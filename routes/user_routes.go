@@ -17,12 +17,18 @@ func NewRouter() *Router {
 	return &Router{ mux: mux.NewRouter() }
 }
 
-func (r *Router) SetupRouter( usercontroller *controllers.UserController) {
+func (r *Router) UserRouter( usercontroller *controllers.UserController) {
 	r.mux.HandleFunc("/createuser", usercontroller.CreateUser).Methods("POST")
 	r.mux.HandleFunc("/userlist", usercontroller.UserList).Methods("GET")
 	r.mux.HandleFunc("/user/{id}", usercontroller.UpdateUser).Methods("PUT")
 	r.mux.HandleFunc("/user/{id}", usercontroller.GetUser).Methods("GET")
-	r.mux.HandleFunc("/user/{id}", usercontroller.DeleteUser).Methods("DELETE")
+	r.mux.HandleFunc("/user/{id}", usercontroller.DeleteUser).Methods("DELETE")	
+	
+}
+
+func (r *Router) InfoRouter( infocontroller *controllers.InfoController) {
+
+	r.mux.HandleFunc("/createinfo", infocontroller.CreateInfo).Methods("POST")
 	
 }
 

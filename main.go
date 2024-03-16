@@ -28,8 +28,14 @@ func main() {
 	userInteractor := usecase.NewUserInteractor(userRepo)	
 	userController := controllers.NewUserController(*userInteractor)
 
+	infoRepo := database.NewInfoSQLiteRepository()	
+	infoInteractor := usecase.NewInfoInteractor(infoRepo)	
+	infoController := controllers.NewInfoController(*infoInteractor)
+
 	router := routes.NewRouter()
-	router.SetupRouter(userController)
+	router.UserRouter(userController)
+	router.InfoRouter(infoController)
+	
 	router.Start(":8080")
 
 }
