@@ -66,10 +66,11 @@ func (repo *InfoSQLiteRepository) Create(info entity.Info) (entity.Info, error) 
 		return entity.Info{}, ErrInfoExists
 	}
 
-	cabelo := string(info.Cabelo.String())
+	fmt.Println(info.Cabelo)
+	fmt.Println(info.Cabelo.String())
  
     insertQuery := "INSERT INTO info (id, id_user, cabelo, olhos, pele, corpo) VALUES (?, ?, ?, ?, ?, ?)"
-    _, err := db.Exec(insertQuery, info.ID, info.Id_user, cabelo, info.Olhos.String(), info.Pele.String(), info.Corpo)
+    _, err := db.Exec(insertQuery, info.ID, info.Id_user, info.Cabelo.String(), info.Olhos.String(), info.Pele.String(), info.Corpo.String())
 
     if err != nil {
 		return entity.Info{}, err

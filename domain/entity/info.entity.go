@@ -68,68 +68,18 @@ type InfoDTO struct {
 	Corpo string `json:"corpo"`
 }
 
-func NewInfo(id_user string, cabelo string, olhos string, pele string, corpo string) (*Info, error) {
-	var newcabelo Cabelo
-	switch cabelo {
-	case "Crespo":
-		newcabelo = Crespo
-	case "Liso":
-		newcabelo = Liso
-	case "Cacheado":
-		newcabelo = Cacheado
-	default:
-		newcabelo = Cacheado // Valor padrão ou tratamento de erro
-	}
-
-	var newolhos Olhos
-	switch olhos {
-	case "Castanho":
-		newolhos = Castanho
-	case "Azul":
-		newolhos = Azul
-	case "Verde":
-		newolhos = Verde
-	case "Preto":
-		newolhos = Preto
-	default:
-		newolhos = Castanho // Valor padrão ou tratamento de erro
-	}
-
-	var newpele Pele
-	switch pele {
-	case "Parda":
-		newpele = Parda
-	case "Negra":
-		newpele = Negra
-	case "Branca":
-		newpele = Branca
-	default:
-		newpele = Parda // Valor padrão ou tratamento de erro
-	}
-
-	var newcorpo Corpo
-	switch corpo {
-	case "Magra":
-		newcorpo = Magra
-	case "Atletica":
-		newcorpo = Atletica
-	case "Gorda":
-		newcorpo = Gorda
-	default:
-		newcorpo = Magra // Valor padrão ou tratamento de erro
-	}
-
-	info := &Info{
+func NewInfo(info Info) (*Info, error) {
+	newinfo := &Info{
 		ID:     uuid.NewString(),
-		Id_user: id_user,
-		Cabelo: newcabelo,
-		Olhos: newolhos,
-		Pele: newpele,
-		Corpo: newcorpo,
+		Id_user: info.Id_user,
+		Cabelo: info.Cabelo,
+		Olhos: info.Olhos,
+		Pele: info.Pele,
+		Corpo: info.Corpo,
 
 	}
 
-	return info, nil
+	return newinfo, nil
 
 }
 

@@ -10,8 +10,8 @@ func NewInfoInteractor(inforepository entity.InfoRepository) *InfoInteractor {
 	return &InfoInteractor{ InfoRepository: inforepository }
 }
 
-func (interactor *InfoInteractor) CreateInfo(id_user string, cabelo string, olhos string, pele string, corpo string) (entity.Info, error) {
-	newinfo, err := entity.NewInfo(id_user, cabelo, olhos, pele, corpo)
+func (interactor *InfoInteractor) CreateInfo(info entity.Info) (entity.Info, error) {
+	newinfo, err := entity.NewInfo(info)
 	if err != nil {
 		return entity.Info{}, err
 	}
