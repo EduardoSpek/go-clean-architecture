@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/eduardospek/go-clean-arquiteture/domain/entity"
-	usecase "github.com/eduardospek/go-clean-arquiteture/usecases"
+	"github.com/eduardospek/go-clean-architecture/domain/entity"
+	usecase "github.com/eduardospek/go-clean-architecture/usecases"
 	"github.com/gorilla/mux"
 )
 

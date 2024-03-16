@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/eduardospek/go-clean-arquiteture/interfaces/controllers"
+	"github.com/eduardospek/go-clean-architecture/interfaces/controllers"
 	"github.com/gorilla/mux"
 )
 

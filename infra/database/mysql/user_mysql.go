@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/eduardospek/go-clean-arquiteture/domain/entity"
+	"github.com/eduardospek/go-clean-architecture/domain/entity"
 	_ "github.com/go-sql-driver/mysql"
 )
 

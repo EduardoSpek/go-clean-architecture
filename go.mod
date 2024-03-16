@@ -1,4 +1,4 @@
-module github.com/eduardospek/go-clean-arquiteture
+module github.com/eduardospek/go-clean-architecture
 
 go 1.22.0
 

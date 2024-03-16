@@ -3,7 +3,7 @@ package memory
 import (
 	"errors"
 
-	"github.com/eduardospek/go-clean-arquiteture/domain/entity"
+	"github.com/eduardospek/go-clean-architecture/domain/entity"
 )
 
 var (

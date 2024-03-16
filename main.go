@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 
-	database "github.com/eduardospek/go-clean-arquiteture/infra/database/sqlite"
-	"github.com/eduardospek/go-clean-arquiteture/interfaces/controllers"
-	"github.com/eduardospek/go-clean-arquiteture/routes"
-	usecase "github.com/eduardospek/go-clean-arquiteture/usecases"
+	database "github.com/eduardospek/go-clean-architecture/infra/database/sqlite"
+	"github.com/eduardospek/go-clean-architecture/interfaces/controllers"
+	"github.com/eduardospek/go-clean-architecture/routes"
+	usecase "github.com/eduardospek/go-clean-architecture/usecases"
 	"github.com/joho/godotenv"
 )
 

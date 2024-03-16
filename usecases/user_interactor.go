@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/eduardospek/go-clean-arquiteture/domain/entity"
+	"github.com/eduardospek/go-clean-architecture/domain/entity"
 )
 
 type UserInteractor struct {

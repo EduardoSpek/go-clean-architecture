@@ -1,6 +1,6 @@
 package usecase
 
-import "github.com/eduardospek/go-clean-arquiteture/domain/entity"
+import "github.com/eduardospek/go-clean-architecture/domain/entity"
 
 type InfoInteractor struct {
 	InfoRepository entity.InfoRepository
