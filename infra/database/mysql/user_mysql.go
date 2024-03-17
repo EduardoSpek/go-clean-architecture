@@ -1,16 +1,15 @@
-package sqlite
+package mysql
 
 import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"os"
 
 	"github.com/eduardospek/go-clean-architecture/domain/entity"
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var (
+var (	
 	ErrUserExists = errors.New("usuário já cadastrado com este nome")	
     ErrUserNotExistsWithID = errors.New("não existe usuário com este ID")
 )
@@ -23,23 +22,8 @@ func NewUserMysqlRepository() *UserMysqlRepository {
 	return &UserMysqlRepository{}
 }
 
-func (repo *UserMysqlRepository) Connect() (*sql.DB, error) {    
-	db, err := sql.Open("mysql", os.Getenv("MYSQL_USERNAME") +":"+ os.Getenv("MYSQL_PASSWORD") +"@tcp("+ os.Getenv("MYSQL_HOST") +":"+ os.Getenv("MYSQL_PORT") +")/"+ os.Getenv("MYSQL_DB") +"")
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-
-	err = db.Ping()
-	if err != nil {
-		return nil, err
-	}
-
-	return db, nil
-}
-
 func (repo *UserMysqlRepository) CreateUserTable() error {    
-    db, err := repo.Connect()
+    db, err := conn.Connect()
 	defer func() {
 		if cerr := db.Close(); cerr != nil {
 			fmt.Println("Erro ao fechar a conexão com o banco de dados:", cerr)
@@ -60,7 +44,7 @@ func (repo *UserMysqlRepository) CreateUserTable() error {
 
 // insertUser insere um novo usuário no banco de dados
 func (repo *UserMysqlRepository) Create(user entity.User) (entity.User, error) {    
-    db, _ := repo.Connect()
+    db, _ := conn.Connect()
 	defer db.Close()
 
     UserExists := repo.UserExists(user.Name)
@@ -79,7 +63,7 @@ func (repo *UserMysqlRepository) Create(user entity.User) (entity.User, error) {
 }
 
 func (repo *UserMysqlRepository) Update(user entity.User) (entity.User, error)  {    
-    db, _ := repo.Connect()
+    db, _ := conn.Connect()
 	defer func() {
 		if cerr := db.Close(); cerr != nil {
 			fmt.Println("Erro ao fechar a conexão com o banco de dados:", cerr)
@@ -128,7 +112,7 @@ func (repo *UserMysqlRepository) Update(user entity.User) (entity.User, error)  
 }
 
 func (repo *UserMysqlRepository) GetById(id string) (entity.User, error) {
-	db, err := repo.Connect()
+	db, err := conn.Connect()
 	defer func() {
 		if cerr := db.Close(); cerr != nil {
 			fmt.Println("Erro ao fechar a conexão com o banco de dados:", cerr)
@@ -169,7 +153,7 @@ func (repo *UserMysqlRepository) GetById(id string) (entity.User, error) {
 
 func (repo *UserMysqlRepository) List() ([]entity.User, error) {
 	
-	db, err := repo.Connect()
+	db, err := conn.Connect()
 	defer func() {
 		if cerr := db.Close(); cerr != nil {
 			fmt.Println("Erro ao fechar a conexão com o banco de dados:", cerr)
@@ -204,7 +188,7 @@ func (repo *UserMysqlRepository) List() ([]entity.User, error) {
 
 func (repo *UserMysqlRepository) Delete(id string) (error) {
 	
-	db, err := repo.Connect()
+	db, err := conn.Connect()
 	defer func() {
 		if cerr := db.Close(); cerr != nil {
 			fmt.Println("Erro ao fechar a conexão com o banco de dados:", cerr)
@@ -233,7 +217,7 @@ func (repo *UserMysqlRepository) Delete(id string) (error) {
 
 //VALIDATIONS
 func (repo *UserMysqlRepository) UserExists(name string) bool {
-    db, _ := repo.Connect()
+    db, _ := conn.Connect()
 	defer func() {
 		if cerr := db.Close(); cerr != nil {
 			fmt.Println("Erro ao fechar a conexão com o banco de dados:", cerr)

@@ -123,15 +123,23 @@ type Info struct {
 	Corpo Corpo `json:"corpo"`
 }
 
-type InfoDTO struct {	
-	Id_user     string `json:"id_user"`
+type InfoInput struct {	
+	Id_user string `json:"id_user"`
+	Cabelo string `json:"cabelo"`
+	Olhos string `json:"olhos"`
+	Pele string `json:"pele"`
+	Corpo string `json:"corpo"`
+}
+type InfoOutput struct {	
+	ID string `json:"id"`
+	Id_user string `json:"id_user"`
 	Cabelo string `json:"cabelo"`
 	Olhos string `json:"olhos"`
 	Pele string `json:"pele"`
 	Corpo string `json:"corpo"`
 }
 
-func NewInfo(info InfoDTO) (*Info, error) {
+func NewInfo(info InfoInput) (*Info, error) {
 	cabelo, err := ParseCabelo(info.Cabelo)
 	
 	if err != nil {
@@ -171,5 +179,5 @@ func NewInfo(info InfoDTO) (*Info, error) {
 }
 
 type InfoRepository interface {
-	Create(info Info) (Info, error)
+	Create(info Info) (InfoOutput, error)
 }

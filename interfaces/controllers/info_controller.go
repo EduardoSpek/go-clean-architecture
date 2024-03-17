@@ -17,7 +17,7 @@ func NewInfoController(infointeractor usecase.InfoInteractor) *InfoController {
 }
 
 func (controller *InfoController) CreateInfo(w http.ResponseWriter, r *http.Request) {
-	var info entity.InfoDTO	
+	var info entity.InfoInput	
 	
 	_ = json.NewDecoder(r.Body).Decode(&info)
 
