@@ -50,10 +50,10 @@ func (repo *InfoSQLiteRepository) Create(info entity.Info) (entity.InfoOutput, e
 		return entity.InfoOutput{}, ErrInfoExists
 	}
 
-	cabelo := string(info.Cabelo.String())
-	olhos := string(info.Olhos.String())
-	pele := string(info.Pele.String())
-	corpo := string(info.Corpo.String())
+	cabelo := info.Cabelo.String()
+	olhos := info.Olhos.String()
+	pele := info.Pele.String()
+	corpo := info.Corpo.String()
  
     insertQuery := "INSERT INTO info (id, id_user, cabelo, olhos, pele, corpo) VALUES (?, ?, ?, ?, ?, ?)"
     _, err := db.Exec(insertQuery, info.ID, info.Id_user, cabelo, olhos, pele, corpo)
