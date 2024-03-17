@@ -4,15 +4,14 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"os"
 
 	"github.com/eduardospek/go-clean-architecture/domain/entity"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 var (
-	ErrUserExists = errors.New("Usuário já cadastrado com este nome")	
-    ErrUserNotExistsWithID = errors.New("Não existe usuário com este ID")
+	ErrUserExists = errors.New("usuário já cadastrado com este nome")	
+    ErrUserNotExistsWithID = errors.New("não existe usuário com este ID")
 )
 
 type UserSQLiteRepository struct {}
@@ -23,23 +22,8 @@ func NewUserSQLiteRepository() *UserSQLiteRepository {
 	return &UserSQLiteRepository{}
 }
 
-func (repo *UserSQLiteRepository) Connect() (*sql.DB, error) {    
-	db, err := sql.Open("sqlite3", os.Getenv("PATCH_DB_SQLITE"))
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-
-	err = db.Ping()
-	if err != nil {
-		return nil, err
-	}
-
-	return db, nil
-}
-
 func (repo *UserSQLiteRepository) CreateUserTable() error {    
-    db, err := repo.Connect()
+    db, err := conn.Connect()
 	defer db.Close()
 
 	if err != nil {
@@ -56,7 +40,7 @@ func (repo *UserSQLiteRepository) CreateUserTable() error {
 
 // insertUser insere um novo usuário no banco de dados
 func (repo *UserSQLiteRepository) Create(user entity.User) (entity.User, error) {    
-    db, _ := repo.Connect()
+    db, _ := conn.Connect()
 	defer db.Close()
 
     UserExists := repo.UserExists(user.Name)
@@ -75,7 +59,7 @@ func (repo *UserSQLiteRepository) Create(user entity.User) (entity.User, error) 
 }
 
 func (repo *UserSQLiteRepository) Update(user entity.User) (entity.User, error)  {    
-    db, _ := repo.Connect()
+    db, _ := conn.Connect()
 	defer db.Close()
 
     UserExists := repo.UserExists(user.Name)
@@ -120,7 +104,7 @@ func (repo *UserSQLiteRepository) Update(user entity.User) (entity.User, error) 
 }
 
 func (repo *UserSQLiteRepository) GetById(id string) (entity.User, error) {
-	db, err := repo.Connect()
+	db, err := conn.Connect()
 	defer db.Close()
 	
 	if err != nil {
@@ -157,7 +141,7 @@ func (repo *UserSQLiteRepository) GetById(id string) (entity.User, error) {
 
 func (repo *UserSQLiteRepository) List() ([]entity.User, error) {
 	
-	db, err := repo.Connect()
+	db, err := conn.Connect()
 	defer db.Close()
 
 	if err != nil {        
@@ -188,7 +172,7 @@ func (repo *UserSQLiteRepository) List() ([]entity.User, error) {
 
 func (repo *UserSQLiteRepository) Delete(id string) (error) {
 	
-	db, err := repo.Connect()
+	db, err := conn.Connect()
 	defer db.Close()
 
     if err != nil {        
@@ -213,7 +197,7 @@ func (repo *UserSQLiteRepository) Delete(id string) (error) {
 
 //VALIDATIONS
 func (repo *UserSQLiteRepository) UserExists(name string) bool {
-    db, _ := repo.Connect()
+    db, _ := conn.Connect()
 	defer db.Close()
 
     userQuery := "SELECT name FROM users WHERE name = ?"

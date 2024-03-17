@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"os"
 
 	"github.com/eduardospek/go-clean-architecture/domain/entity"
 	_ "github.com/mattn/go-sqlite3"
@@ -22,23 +21,8 @@ func NewInfoSQLiteRepository() *InfoSQLiteRepository {
 	return &InfoSQLiteRepository{}
 }
 
-func (repo *InfoSQLiteRepository) Connect() (*sql.DB, error) {    
-	db, err := sql.Open("sqlite3", os.Getenv("PATCH_DB_SQLITE"))
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-
-	err = db.Ping()
-	if err != nil {
-		return nil, err
-	}
-
-	return db, nil
-}
-
 func (repo *InfoSQLiteRepository) CreateInfoTable() error {    
-    db, err := repo.Connect()
+    db, err := conn.Connect()
 	defer db.Close()
 
 	if err != nil {
@@ -58,7 +42,7 @@ func (repo *InfoSQLiteRepository) CreateInfoTable() error {
 
 // insertInfo insere um novo usuário no banco de dados
 func (repo *InfoSQLiteRepository) Create(info entity.Info) (entity.InfoOutput, error) {    
-    db, _ := repo.Connect()
+    db, _ := conn.Connect()
 	defer db.Close()
 
     InfoExists := repo.InfoExists(info.Id_user)
@@ -92,7 +76,7 @@ func (repo *InfoSQLiteRepository) Create(info entity.Info) (entity.InfoOutput, e
 
 //VALIDATIONS
 func (repo *InfoSQLiteRepository) InfoExists(id_user string) bool {
-    db, _ := repo.Connect()
+    db, _ := conn.Connect()
 	defer db.Close()
 
     userQuery := "SELECT id_user FROM info WHERE id_user = ?"

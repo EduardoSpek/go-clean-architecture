@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/eduardospek/go-clean-architecture/domain/entity"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var (	
