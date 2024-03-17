@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	ErrInfoExists = errors.New("Informações já cadastradas")	    
+	ErrInfoExists = errors.New("informações já cadastradas")	    
 )
 
 type InfoSQLiteRepository struct {}
@@ -66,11 +66,13 @@ func (repo *InfoSQLiteRepository) Create(info entity.Info) (entity.Info, error) 
 		return entity.Info{}, ErrInfoExists
 	}
 
-	fmt.Println(info.Cabelo)
-	fmt.Println(info.Cabelo.String())
+	cabelo := string(info.Cabelo.String())
+	olhos := string(info.Olhos.String())
+	pele := string(info.Pele.String())
+	corpo := string(info.Corpo.String())
  
     insertQuery := "INSERT INTO info (id, id_user, cabelo, olhos, pele, corpo) VALUES (?, ?, ?, ?, ?, ?)"
-    _, err := db.Exec(insertQuery, info.ID, info.Id_user, info.Cabelo.String(), info.Olhos.String(), info.Pele.String(), info.Corpo.String())
+    _, err := db.Exec(insertQuery, info.ID, info.Id_user, cabelo, olhos, pele, corpo)
 
     if err != nil {
 		return entity.Info{}, err

@@ -17,13 +17,11 @@ func NewInfoController(infointeractor usecase.InfoInteractor) *InfoController {
 }
 
 func (controller *InfoController) CreateInfo(w http.ResponseWriter, r *http.Request) {
-	var info entity.InfoDTO
-	var newinfo entity.Info
+	var info entity.InfoDTO	
 	
 	_ = json.NewDecoder(r.Body).Decode(&info)
 
-
-	newinfo, err := controller.InfoInteractor.CreateInfo(newinfo)
+	newinfo, err := controller.InfoInteractor.CreateInfo(info)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
