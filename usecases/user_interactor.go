@@ -4,11 +4,20 @@ import (
 	"github.com/eduardospek/go-clean-architecture/domain/entity"
 )
 
-type UserInteractor struct {
-	UserRepository entity.UserRepository
+type UserRepository interface {
+	Create(user entity.User) (entity.User, error)
+	Update(user entity.User) (entity.User, error)
+	GetById(id string) (entity.User, error)
+	List() ([]entity.User, error)
+	Delete(id string) (error)
+	UserExists(name string) bool
 }
 
-func NewUserInteractor(repository entity.UserRepository) *UserInteractor {
+type UserInteractor struct {
+	UserRepository UserRepository
+}
+
+func NewUserInteractor(repository UserRepository) *UserInteractor {
 	return &UserInteractor{ UserRepository: repository}
 }
 

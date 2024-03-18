@@ -15,11 +15,7 @@ const (
 )
 
 func (c Cabelo) String() string {
-	nomes := [...]string{"Crespo", "Liso", "Cacheado"}
-    if c < Crespo || c > Cacheado {
-        return "Tipo de cabelo inválido"
-    }
-    return nomes[c]
+	return [...]string{"Crespo", "Liso", "Cacheado"}[c]
 }
 
 func ParseCabelo(str string) (Cabelo, error) {
@@ -176,8 +172,4 @@ func NewInfo(info InfoInput) (*Info, error) {
 
 	return newinfo, nil
 
-}
-
-type InfoRepository interface {
-	Create(info Info) (InfoOutput, error)
 }

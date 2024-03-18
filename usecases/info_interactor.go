@@ -2,11 +2,16 @@ package usecase
 
 import "github.com/eduardospek/go-clean-architecture/domain/entity"
 
-type InfoInteractor struct {
-	InfoRepository entity.InfoRepository
+
+type InfoRepository interface {
+	Create(info entity.Info) (entity.InfoOutput, error)
 }
 
-func NewInfoInteractor(inforepository entity.InfoRepository) *InfoInteractor {
+type InfoInteractor struct {
+	InfoRepository InfoRepository
+}
+
+func NewInfoInteractor(inforepository InfoRepository) *InfoInteractor {
 	return &InfoInteractor{ InfoRepository: inforepository }
 }
 

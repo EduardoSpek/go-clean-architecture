@@ -7,20 +7,11 @@ import (
 )
 
 var (
-	ErrNameAndZapEmpty = errors.New("Erro: Nome e Whatsapp são necessários")
-	ErrNameEmpty = errors.New("Erro: Nome é necessário")
-	ErrZapEmpty = errors.New("Erro: Whatsapp é necessário")
-	ErrZapLimit = errors.New("Erro: Whatsapp deve ter 13 digitos (Ex: 71 98888-7777)")
+	ErrNameAndZapEmpty = errors.New("erro: Nome e Whatsapp são necessários")
+	ErrNameEmpty = errors.New("erro: Nome é necessário")
+	ErrZapEmpty = errors.New("erro: Whatsapp é necessário")
+	ErrZapLimit = errors.New("erro: Whatsapp deve ter 13 digitos (Ex: 71 98888-7777)")
 )
-
-type UserRepository interface {
-	Create(user User) (User, error)
-	Update(user User) (User, error)
-	GetById(id string) (User, error)
-	List() ([]User, error)
-	Delete(id string) (error)
-	UserExists(name string) bool
-}
 
 type User struct {
 	ID   string `json:"id"`
