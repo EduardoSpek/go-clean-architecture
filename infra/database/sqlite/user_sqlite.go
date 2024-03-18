@@ -43,11 +43,6 @@ func (repo *UserSQLiteRepository) Create(user entity.User) (entity.User, error) 
     db, _ := conn.Connect()
 	defer db.Close()
 
-    UserExists := repo.UserExists(user.Name)
-	if UserExists {
-		return entity.User{}, ErrUserExists
-	}
- 
     insertQuery := "INSERT INTO users (id,  name, zap) VALUES (?, ?, ?)"
     _, err := db.Exec(insertQuery, user.ID, user.Name, user.Zap)
 
@@ -61,11 +56,6 @@ func (repo *UserSQLiteRepository) Create(user entity.User) (entity.User, error) 
 func (repo *UserSQLiteRepository) Update(user entity.User) (entity.User, error)  {    
     db, _ := conn.Connect()
 	defer db.Close()
-
-    UserExists := repo.UserExists(user.Name)
-	if UserExists {
-		return entity.User{}, ErrUserExists
-	}
     
     _, err := repo.GetById(user.ID)
     if err != nil {
@@ -196,7 +186,7 @@ func (repo *UserSQLiteRepository) Delete(id string) (error) {
 }
 
 //VALIDATIONS
-func (repo *UserSQLiteRepository) UserExists(name string) bool {
+func (repo *UserSQLiteRepository) UserExists(name string) error {
     db, _ := conn.Connect()
 	defer db.Close()
 
@@ -207,9 +197,9 @@ func (repo *UserSQLiteRepository) UserExists(name string) bool {
     err := row.Scan(&name)
     if err != nil {        
         if err == sql.ErrNoRows {            
-            return false
+            return err
         }
     }
   
-    return true
+    return nil
 }

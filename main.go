@@ -7,6 +7,7 @@ import (
 	"github.com/eduardospek/go-clean-architecture/interfaces/controllers"
 	"github.com/eduardospek/go-clean-architecture/routes"
 	usecase "github.com/eduardospek/go-clean-architecture/usecases"
+	"github.com/eduardospek/go-clean-architecture/validations"
 	"github.com/joho/godotenv"
 )
 
@@ -24,13 +25,15 @@ func main() {
 
 	//userRepo := memory.NewUserMemoryRepository()
 	//userRepo := database.NewUserMysqlRepository()
-	userRepo := database.NewUserSQLiteRepository()	
-	userInteractor := usecase.NewUserInteractor(userRepo)	
+	userRepo := database.NewUserSQLiteRepository()		
+	userValidation := validations.NewUserValidation(userRepo)
+	userInteractor := usecase.NewUserInteractor(userRepo, *userValidation)		
 	userController := controllers.NewUserController(*userInteractor)
 
-	infoRepo := database.NewInfoSQLiteRepository(userRepo)		
+	infoRepo := database.NewInfoSQLiteRepository(userRepo)	
+	infoValidation := validations.NewInfoValidation(infoRepo, userRepo)	
 	//infoRepo := database.NewInfoMysqlRepository()	
-	infoInteractor := usecase.NewInfoInteractor(infoRepo)	
+	infoInteractor := usecase.NewInfoInteractor(infoRepo, *infoValidation, *userValidation)	
 	infoController := controllers.NewInfoController(*infoInteractor)
 
 	router := routes.NewRouter()

@@ -52,23 +52,13 @@ func (repo *InfoSQLiteRepository) Create(info entity.Info) (entity.InfoOutput, e
     db, _ := conn.Connect()
 	defer db.Close()
 
-	_ , err := repo.UserRepository.GetById(info.Id_user)
-	if err != nil {
-		return entity.InfoOutput{}, ErrUserNotFound
-	}
-
-    InfoExists := repo.InfoExists(info.Id_user)
-	if InfoExists {
-		return entity.InfoOutput{}, ErrInfoExists
-	}
-
 	cabelo := info.Cabelo.String()
 	olhos := info.Olhos.String()
 	pele := info.Pele.String()
 	corpo := info.Corpo.String()
  
     insertQuery := "INSERT INTO info (id, id_user, cabelo, olhos, pele, corpo) VALUES (?, ?, ?, ?, ?, ?)"
-    _, err = db.Exec(insertQuery, info.ID, info.Id_user, cabelo, olhos, pele, corpo)
+    _, err := db.Exec(insertQuery, info.ID, info.Id_user, cabelo, olhos, pele, corpo)
 
     if err != nil {
 		return entity.InfoOutput{}, err
@@ -87,7 +77,7 @@ func (repo *InfoSQLiteRepository) Create(info entity.Info) (entity.InfoOutput, e
 }
 
 //VALIDATIONS
-func (repo *InfoSQLiteRepository) InfoExists(id_user string) bool {
+func (repo *InfoSQLiteRepository) InfoExists(id_user string) error {
     db, _ := conn.Connect()
 	defer db.Close()
 
@@ -98,9 +88,9 @@ func (repo *InfoSQLiteRepository) InfoExists(id_user string) bool {
     err := row.Scan(&id_user)
     if err != nil {        
         if err == sql.ErrNoRows {            
-            return false
+            return err
         }
     }
   
-    return true
+    return nil
 }

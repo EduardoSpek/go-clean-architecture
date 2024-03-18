@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"github.com/eduardospek/go-clean-architecture/domain/entity"
+	"github.com/eduardospek/go-clean-architecture/validations"
 )
 
 type UserRepository interface {
@@ -10,22 +11,29 @@ type UserRepository interface {
 	GetById(id string) (entity.User, error)
 	List() ([]entity.User, error)
 	Delete(id string) (error)
-	UserExists(name string) bool
+	UserExists(name string) error
 }
 
 type UserInteractor struct {
 	UserRepository UserRepository
+	UserValidation validations.UserValidation
 }
 
-func NewUserInteractor(repository UserRepository) *UserInteractor {	
-	return &UserInteractor{ UserRepository: repository}
+func NewUserInteractor(repository UserRepository, validation validations.UserValidation) *UserInteractor {	
+	return &UserInteractor{ UserRepository: repository, UserValidation: validation }
 }
 
 func (interactor *UserInteractor) CreateNewUser(user entity.User) (entity.User, error) {
-	newuser, err := entity.NewUser(user.Name, user.Zap)
-	if err != nil {
-		return entity.User{}, err
+	
+	//Validação para evitar nome e zap vazios
+	isValid := interactor.UserValidation.IsValid(user.Name, user.Zap)
+	
+	if isValid != nil {
+		return entity.User{}, isValid
 	}
+
+	newuser := entity.NewUser(user.Name, user.Zap)
+
 	return interactor.UserRepository.Create(*newuser)
 }
 

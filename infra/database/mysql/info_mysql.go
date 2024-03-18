@@ -52,11 +52,6 @@ func (repo *InfoMysqlRepository) Create(info entity.Info) (entity.InfoOutput, er
     db, _ := conn.Connect()
 	defer db.Close()
 
-	_ , err := repo.UserRepository.GetById(info.Id_user)
-	if err != nil {
-		return entity.InfoOutput{}, ErrUserNotFound
-	}
-
     InfoExists := repo.InfoExists(info.Id_user)
 	if InfoExists {
 		return entity.InfoOutput{}, ErrInfoExists
@@ -68,7 +63,7 @@ func (repo *InfoMysqlRepository) Create(info entity.Info) (entity.InfoOutput, er
 	corpo := info.Corpo.String()
  
     insertQuery := "INSERT INTO info (id, id_user, cabelo, olhos, pele, corpo) VALUES (?, ?, ?, ?, ?, ?)"
-    _, err = db.Exec(insertQuery, info.ID, info.Id_user, cabelo, olhos, pele, corpo)
+    _, err := db.Exec(insertQuery, info.ID, info.Id_user, cabelo, olhos, pele, corpo)
 
     if err != nil {
 		return entity.InfoOutput{}, err
