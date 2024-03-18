@@ -24,12 +24,13 @@ func NewUserSQLiteRepository() *UserSQLiteRepository {
 
 func (repo *UserSQLiteRepository) CreateUserTable() error {    
     db, err := conn.Connect()
-	defer db.Close()
-
+	
 	if err != nil {
         fmt.Println(err)
 		return err
 	}
+
+    defer db.Close()
     _, err = db.Exec(`CREATE TABLE IF NOT EXISTS users (
         id VARCHAR(36) PRIMARY KEY NOT NULL,
         name VARCHAR(50) NOT NULL,
@@ -94,13 +95,14 @@ func (repo *UserSQLiteRepository) Update(user entity.User) (entity.User, error) 
 }
 
 func (repo *UserSQLiteRepository) GetById(id string) (entity.User, error) {
-	db, err := conn.Connect()
-	defer db.Close()
+	db, err := conn.Connect()	
 	
 	if err != nil {
         fmt.Println("Erro ao conectar ao DB")
 		return entity.User{}, err
-	}    
+	}   
+    
+    defer db.Close()
 
     userQuery := "SELECT name, zap FROM users WHERE id = ?"
     row := db.QueryRow(userQuery, id)    
@@ -131,12 +133,13 @@ func (repo *UserSQLiteRepository) GetById(id string) (entity.User, error) {
 
 func (repo *UserSQLiteRepository) List() ([]entity.User, error) {
 	
-	db, err := conn.Connect()
-	defer db.Close()
+	db, err := conn.Connect()	
 
 	if err != nil {        
 		return nil, err
 	}
+
+    defer db.Close()
     
     rows, err := db.Query("SELECT * FROM users ORDER BY name ASC")
     if err != nil {        
@@ -162,12 +165,13 @@ func (repo *UserSQLiteRepository) List() ([]entity.User, error) {
 
 func (repo *UserSQLiteRepository) Delete(id string) (error) {
 	
-	db, err := conn.Connect()
-	defer db.Close()
+	db, err := conn.Connect()	
 
     if err != nil {        
 		return err
 	}
+
+    defer db.Close()
 
     _, err = repo.GetById(id)
 
