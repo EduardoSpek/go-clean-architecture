@@ -28,7 +28,7 @@ func main() {
 	userInteractor := usecase.NewUserInteractor(userRepo)	
 	userController := controllers.NewUserController(*userInteractor)
 
-	infoRepo := database.NewInfoSQLiteRepository()	
+	infoRepo := database.NewInfoSQLiteRepository(userRepo)		
 	//infoRepo := database.NewInfoMysqlRepository()	
 	infoInteractor := usecase.NewInfoInteractor(infoRepo)	
 	infoController := controllers.NewInfoController(*infoInteractor)

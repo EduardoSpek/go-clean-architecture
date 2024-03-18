@@ -9,16 +9,23 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type UserRepository interface {
+	GetById(id string) (entity.User, error)
+}
+
 var (	
+	ErrUserNotFound = errors.New("erro: Usuário não encontrado")	
 	ErrInfoExists = errors.New("informações já cadastradas")		    
 )
 
-type InfoMysqlRepository struct {}
+type InfoMysqlRepository struct {
+	UserRepository UserRepository
+}
 
-func NewInfoMysqlRepository() *InfoMysqlRepository {
-	infoRepo := &InfoMysqlRepository{}
+func NewInfoMysqlRepository(repository UserRepository) *InfoMysqlRepository {
+	infoRepo := &InfoMysqlRepository{ UserRepository: repository }
 	infoRepo.CreateInfoTable()
-	return &InfoMysqlRepository{}
+	return infoRepo
 }
 
 func (repo *InfoMysqlRepository) CreateInfoTable() error {    	
@@ -45,18 +52,23 @@ func (repo *InfoMysqlRepository) Create(info entity.Info) (entity.InfoOutput, er
     db, _ := conn.Connect()
 	defer db.Close()
 
+	_ , err := repo.UserRepository.GetById(info.Id_user)
+	if err != nil {
+		return entity.InfoOutput{}, ErrUserNotFound
+	}
+
     InfoExists := repo.InfoExists(info.Id_user)
 	if InfoExists {
 		return entity.InfoOutput{}, ErrInfoExists
 	}
 
-	cabelo := string(info.Cabelo.String())
-	olhos := string(info.Olhos.String())
-	pele := string(info.Pele.String())
-	corpo := string(info.Corpo.String())
+	cabelo := info.Cabelo.String()
+	olhos := info.Olhos.String()
+	pele := info.Pele.String()
+	corpo := info.Corpo.String()
  
     insertQuery := "INSERT INTO info (id, id_user, cabelo, olhos, pele, corpo) VALUES (?, ?, ?, ?, ?, ?)"
-    _, err := db.Exec(insertQuery, info.ID, info.Id_user, cabelo, olhos, pele, corpo)
+    _, err = db.Exec(insertQuery, info.ID, info.Id_user, cabelo, olhos, pele, corpo)
 
     if err != nil {
 		return entity.InfoOutput{}, err

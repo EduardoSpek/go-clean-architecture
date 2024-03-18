@@ -9,26 +9,33 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+type UserRepository interface {
+	GetById(id string) (entity.User, error)
+}
+
 var (
+	ErrUserNotFound = errors.New("erro: Usuário não encontrado")	    
 	ErrInfoExists = errors.New("informações já cadastradas")	    
 )
 
-type InfoSQLiteRepository struct {}
+type InfoSQLiteRepository struct {
+	UserRepository UserRepository
+}
 
-func NewInfoSQLiteRepository() *InfoSQLiteRepository {
-	infoRepo := &InfoSQLiteRepository{}
+func NewInfoSQLiteRepository(repository UserRepository) *InfoSQLiteRepository {	
+	infoRepo := &InfoSQLiteRepository{ UserRepository: repository }
 	infoRepo.CreateInfoTable()
-	return &InfoSQLiteRepository{}
+	return infoRepo
 }
 
 func (repo *InfoSQLiteRepository) CreateInfoTable() error {    
     db, err := conn.Connect()
-	defer db.Close()
-
 	if err != nil {
         fmt.Println(err)
 		return err
 	}
+	defer db.Close()
+
     _, err = db.Exec(`CREATE TABLE IF NOT EXISTS info (
         id VARCHAR(36) PRIMARY KEY NOT NULL,
 		id_user VARCHAR(36) NOT NULL,
@@ -45,6 +52,11 @@ func (repo *InfoSQLiteRepository) Create(info entity.Info) (entity.InfoOutput, e
     db, _ := conn.Connect()
 	defer db.Close()
 
+	_ , err := repo.UserRepository.GetById(info.Id_user)
+	if err != nil {
+		return entity.InfoOutput{}, ErrUserNotFound
+	}
+
     InfoExists := repo.InfoExists(info.Id_user)
 	if InfoExists {
 		return entity.InfoOutput{}, ErrInfoExists
@@ -56,7 +68,7 @@ func (repo *InfoSQLiteRepository) Create(info entity.Info) (entity.InfoOutput, e
 	corpo := info.Corpo.String()
  
     insertQuery := "INSERT INTO info (id, id_user, cabelo, olhos, pele, corpo) VALUES (?, ?, ?, ?, ?, ?)"
-    _, err := db.Exec(insertQuery, info.ID, info.Id_user, cabelo, olhos, pele, corpo)
+    _, err = db.Exec(insertQuery, info.ID, info.Id_user, cabelo, olhos, pele, corpo)
 
     if err != nil {
 		return entity.InfoOutput{}, err

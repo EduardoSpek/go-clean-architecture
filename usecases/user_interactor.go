@@ -17,7 +17,7 @@ type UserInteractor struct {
 	UserRepository UserRepository
 }
 
-func NewUserInteractor(repository UserRepository) *UserInteractor {
+func NewUserInteractor(repository UserRepository) *UserInteractor {	
 	return &UserInteractor{ UserRepository: repository}
 }
 
