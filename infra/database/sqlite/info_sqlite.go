@@ -88,9 +88,9 @@ func (repo *InfoSQLiteRepository) InfoExists(id_user string) error {
     err := row.Scan(&id_user)
     if err != nil {        
         if err == sql.ErrNoRows {            
-            return err
+            return nil
         }
     }
   
-    return nil
+    return errors.New("erro: Usuário já tem informações")
 }

@@ -21,7 +21,7 @@ func NewInfoInteractor(
 	infovalidation validations.InfoValidation, 
 	uservalidation validations.UserValidation) *InfoInteractor {
 
-		return &InfoInteractor{ InfoRepository: inforepository, UserValidation: uservalidation, 
+		return &InfoInteractor{ InfoRepository: inforepository, InfoValidation: infovalidation, UserValidation: uservalidation, 
 	
 	}
 }
@@ -36,10 +36,10 @@ func (interactor *InfoInteractor) CreateInfo(info entity.InfoInput) (entity.Info
 	err = interactor.UserValidation.UserExsits(newinfo.Id_user)
 	if err != nil {
 		return entity.InfoOutput{}, err
-	}
+	}	
 
 	//Valida se o usuário já tem as informações
-	err = interactor.InfoValidation.InfoRepository.InfoExists(newinfo.Id_user)
+	err = interactor.InfoValidation.InfoExists(newinfo.Id_user)
 	if err != nil {
 		return entity.InfoOutput{}, err
 	}
