@@ -39,7 +39,7 @@ func (interactor *InfoInteractor) CreateInfo(info entity.InfoInput) (entity.Info
 	}	
 
 	//Valida se o usuário já tem as informações
-	err = interactor.InfoValidation.InfoExists(newinfo.Id_user)
+	err = interactor.InfoValidation.UserWithInfo(newinfo.Id_user)
 	if err != nil {
 		return entity.InfoOutput{}, err
 	}

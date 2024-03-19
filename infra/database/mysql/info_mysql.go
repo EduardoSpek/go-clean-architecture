@@ -30,12 +30,14 @@ func NewInfoMysqlRepository(repository UserRepository) *InfoMysqlRepository {
 
 func (repo *InfoMysqlRepository) CreateInfoTable() error {    	
     db, err := conn.Connect()
-	defer db.Close()
-
+	
 	if err != nil {
         fmt.Println(err)
 		return err
 	}
+
+	defer db.Close()
+
     _, err = db.Exec(`CREATE TABLE IF NOT EXISTS info (
         id VARCHAR(36) PRIMARY KEY NOT NULL,
 		id_user VARCHAR(36) NOT NULL,
@@ -51,11 +53,6 @@ func (repo *InfoMysqlRepository) CreateInfoTable() error {
 func (repo *InfoMysqlRepository) Create(info entity.Info) (entity.InfoOutput, error) {    
     db, _ := conn.Connect()
 	defer db.Close()
-
-    InfoExists := repo.InfoExists(info.Id_user)
-	if InfoExists {
-		return entity.InfoOutput{}, ErrInfoExists
-	}
 
 	cabelo := info.Cabelo.String()
 	olhos := info.Olhos.String()
@@ -82,7 +79,7 @@ func (repo *InfoMysqlRepository) Create(info entity.Info) (entity.InfoOutput, er
 }
 
 //VALIDATIONS
-func (repo *InfoMysqlRepository) InfoExists(id_user string) bool {
+func (repo *InfoMysqlRepository) UserWithInfo(id_user string) error {
     db, _ := conn.Connect()
 	defer db.Close()
 
@@ -93,9 +90,9 @@ func (repo *InfoMysqlRepository) InfoExists(id_user string) bool {
     err := row.Scan(&id_user)
     if err != nil {        
         if err == sql.ErrNoRows {            
-            return false
+            return nil
         }
     }
   
-    return true
+    return errors.New("erro: Usuário já tem informações")
 }

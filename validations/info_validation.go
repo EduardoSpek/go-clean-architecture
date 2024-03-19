@@ -1,7 +1,7 @@
 package validations
 
 type InfoValidationRepository interface {
-	InfoExists(id_user string) error
+	UserWithInfo(id_user string) error
 }
 
 type InfoValidation struct {
@@ -13,8 +13,8 @@ func NewInfoValidation(repository InfoValidationRepository, user_repository User
 	return &InfoValidation{InfoRepository: repository, UserRepository: user_repository}
 }
 
-func (v *InfoValidation) InfoExists(id_user string) error {
-	err := v.InfoRepository.InfoExists(id_user)
+func (v *InfoValidation) UserWithInfo(id_user string) error {
+	err := v.InfoRepository.UserWithInfo(id_user)
 	if err != nil {
 		return err
 	}

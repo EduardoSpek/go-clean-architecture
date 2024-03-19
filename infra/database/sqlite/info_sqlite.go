@@ -77,7 +77,7 @@ func (repo *InfoSQLiteRepository) Create(info entity.Info) (entity.InfoOutput, e
 }
 
 //VALIDATIONS
-func (repo *InfoSQLiteRepository) InfoExists(id_user string) error {
+func (repo *InfoSQLiteRepository) UserWithInfo(id_user string) error {
     db, _ := conn.Connect()
 	defer db.Close()
 
