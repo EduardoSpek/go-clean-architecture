@@ -128,7 +128,7 @@ type InfoInput struct {
 }
 type InfoOutput struct {	
 	ID string `json:"id"`
-	Id_user string `json:"id_user"`
+	Id_user string `json:"-"`
 	Cabelo string `json:"cabelo"`
 	Olhos string `json:"olhos"`
 	Pele string `json:"pele"`

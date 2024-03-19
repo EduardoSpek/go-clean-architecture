@@ -30,7 +30,7 @@ func (interactor *UserInfoInteractor) Get(id string) (aggregate.UserWithInfo, er
 		return aggregate.UserWithInfo{}, err
 	}	
 
-	userinfo := aggregate.NewUserWithInfo(user, info)
+	userinfo := aggregate.NewUserWithInfo(user, info)	
 
 	return *userinfo, nil
 }
