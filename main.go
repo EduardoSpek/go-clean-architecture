@@ -23,7 +23,7 @@ func main() {
 	//Carrega as variáveis de ambiente
 	LoadEnv()
 
-	//userRepo := memory.NewUserMemoryRepository()
+	
 	//userRepo := database.NewUserMysqlRepository()
 	userRepo := database.NewUserSQLiteRepository()		
 	userValidation := validations.NewUserValidation(userRepo)
