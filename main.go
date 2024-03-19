@@ -36,9 +36,14 @@ func main() {
 	infoInteractor := usecase.NewInfoInteractor(infoRepo, *infoValidation, *userValidation)	
 	infoController := controllers.NewInfoController(*infoInteractor)
 
+	userinfoInteractor := usecase.NewUserInfoInteractor(userRepo, infoRepo)	
+	userinfoController := controllers.NewUserInfoController(*userinfoInteractor)
+
 	router := routes.NewRouter()
 	router.UserRouter(userController)
 	router.InfoRouter(infoController)
+
+	router.UserInfoRouter(userinfoController)
 	
 	router.Start(":8080")
 

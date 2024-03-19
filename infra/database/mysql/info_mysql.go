@@ -78,6 +78,46 @@ func (repo *InfoMysqlRepository) Create(info entity.Info) (entity.InfoOutput, er
     return infoOutput, err
 }
 
+func (repo *InfoMysqlRepository) GetById(id string) (entity.InfoOutput, error) {
+	db, err := conn.Connect()	
+	
+	if err != nil {
+        fmt.Println("Erro ao conectar ao DB")
+		return entity.InfoOutput{}, err
+	}   
+    
+    defer db.Close()    
+
+    userQuery := "SELECT id_user, cabelo, olhos, pele, corpo FROM info WHERE id_user = ?"
+    row := db.QueryRow(userQuery, id)     
+
+    // Variáveis para armazenar os dados do usuário
+    var id_user, cabelo, olhos, pele, corpo string
+
+    // Recuperando os valores do banco de dados
+    err = row.Scan(&id_user, &cabelo, &olhos, &pele, &corpo)
+    if err != nil {        
+        // Se não houver usuário correspondente ao ID fornecido, retornar nil
+        if err == sql.ErrNoRows {            
+            return entity.InfoOutput{}, ErrUserNotExistsWithID
+        }
+        // Se ocorrer outro erro, retornar o erro        
+        return entity.InfoOutput{}, err
+    }
+
+    // Criando a entidade Info com os dados recuperados
+    user := &entity.InfoOutput{
+        ID: id,
+		Id_user: id_user,
+        Cabelo: cabelo,
+		Olhos: olhos,
+		Pele: pele,
+		Corpo: corpo,
+    }    
+    
+    return *user, err
+}
+
 //VALIDATIONS
 func (repo *InfoMysqlRepository) UserWithInfo(id_user string) error {
     db, _ := conn.Connect()
