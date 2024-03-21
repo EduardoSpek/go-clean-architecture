@@ -24,6 +24,7 @@ func main() {
 	LoadEnv()
 
 	
+	
 	//userRepo := database.NewUserMysqlRepository()
 	userRepo := database.NewUserSQLiteRepository()		
 	userValidation := validations.NewUserValidation(userRepo)
@@ -40,9 +41,9 @@ func main() {
 	userinfoController := controllers.NewUserInfoController(*userinfoInteractor)
 
 	router := routes.NewRouter()
+	
 	router.UserRouter(userController)
-	router.InfoRouter(infoController)
-
+	router.InfoRouter(infoController)	
 	router.UserInfoRouter(userinfoController)
 	
 	router.Start(":8080")

@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/eduardospek/go-clean-architecture/middlewares"
 	"github.com/gorilla/mux"
 )
 
@@ -17,6 +18,9 @@ func NewRouter() *Router {
 }
 
 func (r *Router) Start(port string) {
+	
+	r.mux.Use(middlewares.CorsMiddleware)
+	
 	fmt.Println("O Servidor foi iniciado na porta "+ port)
 	log.Fatal(http.ListenAndServe(port, r.mux))	
 }
