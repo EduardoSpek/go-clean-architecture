@@ -23,6 +23,7 @@ func (c *UserInfoController) Get(w http.ResponseWriter, r *http.Request) {
 
 	userinfo, err := c.UserInfoInteractor.Get(id)
 	if err != nil {
+		http.Error(w, "Usuário não encontrado", http.StatusInternalServerError)
 		return
 	}
 

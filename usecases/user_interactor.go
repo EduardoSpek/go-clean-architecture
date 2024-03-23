@@ -26,13 +26,20 @@ func NewUserInteractor(repository UserRepository, validation validations.UserVal
 func (interactor *UserInteractor) CreateNewUser(user entity.User) (entity.User, error) {
 	
 	//Validação para evitar nome e zap vazios
-	isValid := interactor.UserValidation.IsValid(user.Name, user.Zap)
+	err := interactor.UserValidation.IsValid(user.Name, user.Zap)
 	
-	if isValid != nil {
-		return entity.User{}, isValid
+	if err != nil {
+		return entity.User{}, err
 	}
 
 	newuser := entity.NewUser(user.Name, user.Zap)
+
+	//Validação para evitar nome e zap vazios
+	err = interactor.UserValidation.UserNameExsits(user.Name)
+	
+	if err != nil {
+		return entity.User{}, err
+	}
 
 	return interactor.UserRepository.Create(*newuser)
 }

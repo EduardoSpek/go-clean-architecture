@@ -10,11 +10,12 @@ var (
 	ErrNameAndZapEmpty = errors.New("erro: Nome e Whatsapp são necessários")
 	ErrNameEmpty = errors.New("erro: Nome é necessário")
 	ErrZapEmpty = errors.New("erro: Whatsapp é necessário")
-	ErrZapLimit = errors.New("erro: Whatsapp deve ter 13 digitos (Ex: 71 98888-7777)")
+	ErrZapLimit = errors.New("erro: Whatsapp deve ter minímo de 11 e máximo de 13 digitos (Ex: 71999997777 ou 71 99999-8888)")
 )
 
 type UserValidationRepository interface {
 	GetById(id string) (entity.User, error)
+	UserExists(name string) error
 }
 
 type UserValidation struct {
@@ -35,7 +36,10 @@ func (v *UserValidation) IsValid(name string, zap string) error {
 	if zap == "" {
 		return ErrZapEmpty
 	}
-	if len(zap) < 13 {
+	if len(zap) < 11 {
+		return ErrZapLimit
+	}
+	if len(zap) > 13 {
 		return ErrZapLimit
 	}
 
@@ -44,6 +48,13 @@ func (v *UserValidation) IsValid(name string, zap string) error {
 
 func (v *UserValidation) UserExsits(id_user string) error {
 	_, err := v.UserRepository.GetById(id_user)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (v *UserValidation) UserNameExsits(name string) error {
+	err := v.UserRepository.UserExists(name)
 	if err != nil {
 		return err
 	}

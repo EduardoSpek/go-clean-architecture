@@ -201,9 +201,9 @@ func (repo *UserSQLiteRepository) UserExists(name string) error {
     err := row.Scan(&name)
     if err != nil {        
         if err == sql.ErrNoRows {            
-            return err
+            return nil
         }
     }
   
-    return nil
+    return errors.New("já existe usuário com este nome")
 }
