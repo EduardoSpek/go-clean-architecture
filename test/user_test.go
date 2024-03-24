@@ -206,8 +206,8 @@ func TestUserInteractor(t *testing.T) {
 	t.Run("Retorna o usuário pelo ID", func(t *testing.T) {
 		
 		testuser := &entity.User{
-			Name: "Aline Mineiro", 
-			Zap: "71996229995",
+			Name: "Alane Dias", 
+			Zap: "71996229996",
 		}
 
 		newuser, err := userInteractor.CreateNewUser(*testuser)

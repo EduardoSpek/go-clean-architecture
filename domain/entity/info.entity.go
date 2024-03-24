@@ -127,7 +127,7 @@ type InfoInput struct {
 	Corpo string `json:"corpo"`
 }
 type InfoOutput struct {	
-	ID string `json:"id"`
+	ID string `json:"-"`
 	Id_user string `json:"-"`
 	Cabelo string `json:"cabelo"`
 	Olhos string `json:"olhos"`
