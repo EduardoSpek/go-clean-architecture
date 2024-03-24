@@ -66,6 +66,6 @@ func (interactor *UserInteractor) UserList() ([]entity.User, error) {
 	return interactor.UserRepository.List()
 }
 
-func (interactor *UserInteractor) DeleteUser(id string) (error) {
+func (interactor *UserInteractor) DeleteUser(id string) error {
 	return interactor.UserRepository.Delete(id)
 }
