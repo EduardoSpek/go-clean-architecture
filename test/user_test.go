@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/eduardospek/go-clean-architecture/domain/entity"
-	database "github.com/eduardospek/go-clean-architecture/infra/database/memory"
+	database "github.com/eduardospek/go-clean-architecture/infra/database/memorydb"
 	usecase "github.com/eduardospek/go-clean-architecture/usecases"
 	"github.com/eduardospek/go-clean-architecture/validations"
 	"github.com/google/uuid"
