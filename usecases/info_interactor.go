@@ -30,7 +30,7 @@ func (interactor *InfoInteractor) CreateInfo(info entity.InfoInput) (entity.Info
 	newinfo, err := entity.NewInfo(info)
 	if err != nil {
 		return entity.InfoOutput{}, err
-	}
+	}		
 
 	//Valida se existe um usuário antes de inserir as informações
 	err = interactor.UserValidation.UserExsits(newinfo.Id_user)

@@ -30,7 +30,7 @@ func (repo *UserMemoryRepository) Update(user entity.User) (entity.User, error) 
 	return user, nil
 }
 
-func (repo *UserMemoryRepository) GetById(id string) (entity.User, error) {
+func (repo *UserMemoryRepository) GetById(id string) (entity.User, error) {	
 	if user, ok := repo.users[id]; ok {
 		return user, nil
 	}
@@ -63,7 +63,7 @@ func (repo *UserMemoryRepository) Delete(id string) error {
 func (repo *UserMemoryRepository) UserExists(name string) error {
     for _, user := range repo.users {
         if user.Name == name {
-            return errors.New("Já existe usuário com este nome")
+            return ErrUserExists
         }
     }
     return nil

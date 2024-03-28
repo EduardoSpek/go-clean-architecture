@@ -19,11 +19,7 @@ func TestUser(t *testing.T) {
 		ID: uuid.NewString(), Name: "Eduardo Spek", Zap: "71 99622-9991",
 	}
 
-	esperado := &entity.User{
-		ID: uuid.NewString(),
-		Name: "Eduardo Spek",
-		Zap: "71 99622-9991",
-	}
+	esperado := entity.NewUser(testuser.Name, testuser.Zap)
 
 	t.Run("ID não pode ter menos que 36 caracteres", func(t *testing.T) {
 		userID := testuser.ID

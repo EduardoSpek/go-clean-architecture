@@ -46,7 +46,7 @@ func (v *UserValidation) IsValid(name string, zap string) error {
 	return nil
 }
 
-func (v *UserValidation) UserExsits(id_user string) error {
+func (v *UserValidation) UserExsits(id_user string) error {	
 	_, err := v.UserRepository.GetById(id_user)
 	if err != nil {
 		return err
