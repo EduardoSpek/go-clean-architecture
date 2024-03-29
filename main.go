@@ -22,8 +22,6 @@ func main() {
 
 	//Carrega as variáveis de ambiente
 	LoadEnv()
-
-	
 	
 	//userRepo := database.NewUserMysqlRepository()
 	userRepo := database.NewUserSQLiteRepository()		

@@ -76,7 +76,35 @@ func (repo *InfoSQLiteRepository) Create(info entity.Info) (entity.InfoOutput, e
     return infoOutput, err
 }
 
-func (repo *InfoSQLiteRepository) GetById(id string) (entity.InfoOutput, error) {
+func (repo *InfoSQLiteRepository) Update(info entity.Info) (entity.InfoOutput, error) {    
+    db, _ := conn.Connect()
+	defer db.Close()
+
+	cabelo := info.Cabelo.String()
+	olhos := info.Olhos.String()
+	pele := info.Pele.String()
+	corpo := info.Corpo.String()
+ 
+    insertQuery := "UPDATE info SET cabelo=?, olhos=?, pele=?, corpo=? WHERE id=?"
+    _, err := db.Exec(insertQuery, cabelo, olhos, pele, corpo, info.ID)
+
+    if err != nil {
+		return entity.InfoOutput{}, err
+	}   
+	
+	infoOutput := entity.InfoOutput {
+		ID: info.ID,
+		Id_user: info.Id_user,
+		Cabelo: info.Cabelo.String(),
+		Olhos: info.Olhos.String(),
+		Pele: info.Pele.String(),
+		Corpo: info.Corpo.String(),
+	}
+    
+    return infoOutput, err
+}
+
+func (repo *InfoSQLiteRepository) GetById(id_user string) (entity.InfoOutput, error) {
 	db, err := conn.Connect()	
 	
 	if err != nil {
@@ -86,14 +114,14 @@ func (repo *InfoSQLiteRepository) GetById(id string) (entity.InfoOutput, error) 
     
     defer db.Close()    
 
-    userQuery := "SELECT id_user, cabelo, olhos, pele, corpo FROM info WHERE id_user = ?"
-    row := db.QueryRow(userQuery, id)     
+    userQuery := "SELECT id, cabelo, olhos, pele, corpo FROM info WHERE id_user = ?"
+    row := db.QueryRow(userQuery, id_user)     
 
     // Variáveis para armazenar os dados do usuário
-    var id_user, cabelo, olhos, pele, corpo string
+    var id, cabelo, olhos, pele, corpo string
 
     // Recuperando os valores do banco de dados
-    err = row.Scan(&id_user, &cabelo, &olhos, &pele, &corpo)
+    err = row.Scan(&id, &cabelo, &olhos, &pele, &corpo)
     if err != nil {        
         // Se não houver usuário correspondente ao ID fornecido, retornar nil
         if err == sql.ErrNoRows {            

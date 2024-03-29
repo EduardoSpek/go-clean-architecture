@@ -96,6 +96,71 @@ func TestInfoInteractor(t *testing.T) {
 		if info.Id_user != infoInput.Id_user {
 			t.Errorf("Esperado: %s | Recebido: %s", infoInput.Id_user, info.Id_user)
 		}
+	})	
+
+	t.Run("Deve atualizar uma Informação", func(t *testing.T) {	
+		
+		inputUser := entity.User{
+			Name: "Thaís Freire",
+			Zap: "71996229991",
+		}
+		
+		user, err := userInteractor.CreateNewUser(inputUser)
+
+		if err != nil {
+			t.Errorf("Erro: %s", err)
+		}
+
+		infoInput := entity.InfoInput{
+			Id_user: user.ID,
+			Cabelo: "Cacheado",
+			Olhos: "Verde",
+			Pele: "Branca",
+			Corpo: "Magra",
+
+		}
+	
+		info, err := infoInteractor.CreateInfo(infoInput)
+
+		if err != nil {
+			t.Errorf("Erro: %s", err)
+		}
+
+		infoInput = entity.InfoInput{
+			ID: info.ID,
+			Id_user: user.ID,
+			Cabelo: "Liso",
+			Olhos: "Azul",
+			Pele: "Branca",
+			Corpo: "Gorda",
+	
+		}
+
+		newinfo, err := infoInteractor.UpdateInfo(infoInput)
+
+		if err != nil {
+			t.Errorf("Erro: %s", err)
+		}
+
+		if newinfo.Id_user != infoInput.Id_user {
+			t.Errorf("Esperado: %s | Recebido: %s", infoInput.Id_user, info.Id_user)
+		}
+
+		if newinfo.Cabelo != infoInput.Cabelo {
+			t.Errorf("Esperado: %s | Recebido: %s", infoInput.Cabelo, info.Cabelo)
+		}
+
+		if newinfo.Olhos != infoInput.Olhos {
+			t.Errorf("Esperado: %s | Recebido: %s", infoInput.Olhos, info.Olhos)
+		}
+
+		if newinfo.Pele != infoInput.Pele {
+			t.Errorf("Esperado: %s | Recebido: %s", infoInput.Pele, info.Pele)
+		}
+
+		if newinfo.Corpo != infoInput.Corpo {
+			t.Errorf("Esperado: %s | Recebido: %s", infoInput.Corpo, info.Corpo)
+		}
 	})
 
 }

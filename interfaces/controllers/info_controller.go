@@ -6,6 +6,7 @@ import (
 
 	"github.com/eduardospek/go-clean-architecture/domain/entity"
 	usecase "github.com/eduardospek/go-clean-architecture/usecases"
+	"github.com/gorilla/mux"
 )
 
 type InfoController struct {
@@ -22,6 +23,26 @@ func (controller *InfoController) CreateInfo(w http.ResponseWriter, r *http.Requ
 	_ = json.NewDecoder(r.Body).Decode(&info)
 
 	newinfo, err := controller.InfoInteractor.CreateInfo(info)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(newinfo)
+}
+
+func (controller *InfoController) UpdateInfo(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	
+	var info entity.InfoInput
+
+	info.ID = id
+	
+	_ = json.NewDecoder(r.Body).Decode(&info)
+
+	newinfo, err := controller.InfoInteractor.UpdateInfo(info)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

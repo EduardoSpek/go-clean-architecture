@@ -119,7 +119,8 @@ type Info struct {
 	Corpo Corpo `json:"corpo"`
 }
 
-type InfoInput struct {	
+type InfoInput struct {		
+	ID     string `json:"id"`
 	Id_user string `json:"id_user"`
 	Cabelo string `json:"cabelo"`
 	Olhos string `json:"olhos"`
@@ -127,7 +128,7 @@ type InfoInput struct {
 	Corpo string `json:"corpo"`
 }
 type InfoOutput struct {	
-	ID string `json:"-"`
+	ID string `json:"id"`
 	Id_user string `json:"-"`
 	Cabelo string `json:"cabelo"`
 	Olhos string `json:"olhos"`
@@ -159,9 +160,13 @@ func NewInfo(info InfoInput) (*Info, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	if info.ID == "" {
+		info.ID = uuid.NewString()
+	}
 	
 	newinfo := &Info{
-		ID:     uuid.NewString(),
+		ID:     info.ID,
 		Id_user: info.Id_user,
 		Cabelo: cabelo,
 		Olhos: olhos,

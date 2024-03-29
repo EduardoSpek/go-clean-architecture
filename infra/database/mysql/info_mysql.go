@@ -78,6 +78,34 @@ func (repo *InfoMysqlRepository) Create(info entity.Info) (entity.InfoOutput, er
     return infoOutput, err
 }
 
+func (repo *InfoMysqlRepository) Update(info entity.Info) (entity.InfoOutput, error) {    
+    db, _ := conn.Connect()
+	defer db.Close()
+
+	cabelo := info.Cabelo.String()
+	olhos := info.Olhos.String()
+	pele := info.Pele.String()
+	corpo := info.Corpo.String()
+ 
+    insertQuery := "UPDATE info SET cabelo=?, olhos=?, pele=?, corpo=? WHERE id=?"
+    _, err := db.Exec(insertQuery, cabelo, olhos, pele, corpo, info.ID)
+
+    if err != nil {
+		return entity.InfoOutput{}, err
+	}   
+	
+	infoOutput := entity.InfoOutput {
+		ID: info.ID,
+		Id_user: info.Id_user,
+		Cabelo: info.Cabelo.String(),
+		Olhos: info.Olhos.String(),
+		Pele: info.Pele.String(),
+		Corpo: info.Corpo.String(),
+	}
+    
+    return infoOutput, err
+}
+
 func (repo *InfoMysqlRepository) GetById(id string) (entity.InfoOutput, error) {
 	db, err := conn.Connect()	
 	

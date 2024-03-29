@@ -30,6 +30,22 @@ func (repo *InfoMemoryRepository) Create(info entity.Info) (entity.InfoOutput, e
 	return newinfo, nil
 }
 
+func (repo *InfoMemoryRepository) Update(info entity.Info) (entity.InfoOutput, error) {
+
+	repo.infos[info.ID] = info
+
+	newinfo := entity.InfoOutput{
+		ID: info.ID,
+		Id_user: info.Id_user,
+		Cabelo: info.Cabelo.String(),
+		Olhos: info.Olhos.String(),
+		Pele: info.Pele.String(),
+		Corpo: info.Corpo.String(),
+	}
+
+	return newinfo, nil
+}
+
 func (repo *InfoMemoryRepository) GetById(id string) (entity.InfoOutput, error) {	
 	if info, ok := repo.infos[id]; ok {
 		newinfo := entity.InfoOutput{
