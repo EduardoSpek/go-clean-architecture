@@ -11,6 +11,7 @@ import (
 )
 
 func TestUser(t *testing.T) {
+	t.Parallel()
 	testuser := struct {
 		ID string
 		Name string 
@@ -21,7 +22,7 @@ func TestUser(t *testing.T) {
 
 	esperado := entity.NewUser(testuser.Name, testuser.Zap)
 
-	t.Run("ID não pode ter menos que 36 caracteres", func(t *testing.T) {
+	t.Run("ID não pode ter menos que 36 caracteres", func(t *testing.T) {		
 		userID := testuser.ID
 		if len(userID) < 36 {
 			t.Errorf("Esperado %d Retornado %d", len(esperado.ID), len(userID))
@@ -52,6 +53,7 @@ func TestUser(t *testing.T) {
 }
 
 func TestUserValidation(t *testing.T) {
+	t.Parallel()
 	
 	userRepo := database.NewUserMemoryRepository()
 	userValidation := validations.NewUserValidation(userRepo)
@@ -102,6 +104,7 @@ func TestUserValidation(t *testing.T) {
 
 
 func TestUserInteractor(t *testing.T) {
+	t.Parallel()
 	
 	userRepo := database.NewUserMemoryRepository()
 	userValidation := validations.NewUserValidation(userRepo)

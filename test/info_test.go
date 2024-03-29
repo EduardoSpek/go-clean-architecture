@@ -10,6 +10,7 @@ import (
 )
 
 func TestInfo(t *testing.T) {
+	t.Parallel()
 	user := entity.NewUser("Info Test", "71996229991")
 
 	infoInput := entity.InfoInput{
@@ -55,6 +56,7 @@ func TestInfo(t *testing.T) {
 }
 
 func TestInfoInteractor(t *testing.T) {
+	t.Parallel()
 	userRepo := database.NewUserMemoryRepository()		
 	userValidation := validations.NewUserValidation(userRepo)
 	userInteractor := usecase.NewUserInteractor(userRepo, *userValidation)
