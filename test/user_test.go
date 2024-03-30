@@ -2,6 +2,7 @@ package test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/eduardospek/go-clean-architecture/domain/entity"
 	database "github.com/eduardospek/go-clean-architecture/infra/database/memorydb"
@@ -16,8 +17,14 @@ func TestUser(t *testing.T) {
 		ID string
 		Name string 
 		Zap string
+		CreatedAt  time.Time
+		UpdatedAt  time.Time
 	}{
-		ID: uuid.NewString(), Name: "Eduardo Spek", Zap: "71 99622-9991",
+		ID: uuid.NewString(),
+		Name: "Eduardo Spek",
+		Zap: "71 99622-9991",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
 	esperado := entity.NewUser(testuser.Name, testuser.Zap)
@@ -47,6 +54,40 @@ func TestUser(t *testing.T) {
 		userZap := testuser.Zap
 		if userZap != esperado.Zap {
 			t.Errorf("Esperado %s Retornado %s", esperado.Zap, userZap)
+		}
+	})
+
+	t.Run("Testando a data de criação", func(t *testing.T) {
+		
+		CreatedAt := testuser.CreatedAt
+		
+		if CreatedAt.Day() != esperado.CreatedAt.Day() {
+			t.Errorf("Esperado %d Retornado %d", esperado.CreatedAt.Day(), CreatedAt.Day() )
+		}
+
+		if CreatedAt.Month() != esperado.CreatedAt.Month() {
+			t.Errorf("Esperado %s Retornado %s", esperado.CreatedAt.Month(), CreatedAt.Month() )
+		}
+
+		if CreatedAt.Year() != esperado.CreatedAt.Year() {
+			t.Errorf("Esperado %d Retornado %d", esperado.CreatedAt.Year(), CreatedAt.Year() )
+		}
+	})
+
+	t.Run("Testando a data de atualização", func(t *testing.T) {
+		
+		UpdatedAt := testuser.UpdatedAt
+		
+		if UpdatedAt.Day() != esperado.UpdatedAt.Day() {
+			t.Errorf("Esperado %d Retornado %d", esperado.UpdatedAt.Day(), UpdatedAt.Day() )
+		}
+
+		if UpdatedAt.Month() != esperado.UpdatedAt.Month() {
+			t.Errorf("Esperado %s Retornado %s", esperado.UpdatedAt.Month(), UpdatedAt.Month() )
+		}
+
+		if UpdatedAt.Year() != esperado.UpdatedAt.Year() {
+			t.Errorf("Esperado %d Retornado %d", esperado.UpdatedAt.Year(), UpdatedAt.Year() )
 		}
 	})
 

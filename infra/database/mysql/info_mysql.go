@@ -44,7 +44,9 @@ func (repo *InfoMysqlRepository) CreateInfoTable() error {
         cabelo VARCHAR(50) NOT NULL,
         olhos VARCHAR(50) NOT NULL,
 		pele VARCHAR(50) NOT NULL,
-		corpo VARCHAR(50) NOT NULL
+		corpo VARCHAR(50) NOT NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )`)
     return err
 }

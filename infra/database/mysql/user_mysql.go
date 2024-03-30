@@ -37,7 +37,9 @@ func (repo *UserMysqlRepository) CreateUserTable() error {
     _, err = db.Exec(`CREATE TABLE IF NOT EXISTS users (
         id VARCHAR(36) PRIMARY KEY NOT NULL,
         name VARCHAR(50) NOT NULL,
-        zap VARCHAR(100) NOT NULL
+        zap VARCHAR(100) NOT NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )`)
     return err
 }

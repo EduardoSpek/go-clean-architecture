@@ -2,6 +2,7 @@ package entity
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -117,6 +118,8 @@ type Info struct {
 	Olhos Olhos `json:"olhos"`
 	Pele Pele `json:"pele"`
 	Corpo Corpo `json:"corpo"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }
 
 type InfoInput struct {		
@@ -134,6 +137,8 @@ type InfoOutput struct {
 	Olhos string `json:"olhos"`
 	Pele string `json:"pele"`
 	Corpo string `json:"corpo"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }
 
 func NewInfo(info InfoInput) (*Info, error) {
@@ -172,6 +177,8 @@ func NewInfo(info InfoInput) (*Info, error) {
 		Olhos: olhos,
 		Pele: pele,
 		Corpo: corpo,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 
 	}
 

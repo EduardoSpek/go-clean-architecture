@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/eduardospek/go-clean-architecture/domain/entity"
 	_ "github.com/mattn/go-sqlite3"
@@ -42,8 +43,16 @@ func (repo *InfoSQLiteRepository) CreateInfoTable() error {
         cabelo VARCHAR(50) NOT NULL,
         olhos VARCHAR(50) NOT NULL,
 		pele VARCHAR(50) NOT NULL,
-		corpo VARCHAR(50) NOT NULL
-    )`)
+		corpo VARCHAR(50) NOT NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+	CREATE TRIGGER update_info
+	AFTER UPDATE ON info
+	FOR EACH ROW
+	BEGIN
+		UPDATE info SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+	END;`)
     return err
 }
 
@@ -114,14 +123,15 @@ func (repo *InfoSQLiteRepository) GetById(id_user string) (entity.InfoOutput, er
     
     defer db.Close()    
 
-    userQuery := "SELECT id, cabelo, olhos, pele, corpo FROM info WHERE id_user = ?"
+    userQuery := "SELECT id, cabelo, olhos, pele, corpo, created_at, updated_at FROM info WHERE id_user = ?"
     row := db.QueryRow(userQuery, id_user)     
 
     // Variáveis para armazenar os dados do usuário
     var id, cabelo, olhos, pele, corpo string
+	var created_at, updated_at time.Time
 
     // Recuperando os valores do banco de dados
-    err = row.Scan(&id, &cabelo, &olhos, &pele, &corpo)
+    err = row.Scan(&id, &cabelo, &olhos, &pele, &corpo, &created_at, &updated_at)
     if err != nil {        
         // Se não houver usuário correspondente ao ID fornecido, retornar nil
         if err == sql.ErrNoRows {            
@@ -139,6 +149,8 @@ func (repo *InfoSQLiteRepository) GetById(id_user string) (entity.InfoOutput, er
 		Olhos: olhos,
 		Pele: pele,
 		Corpo: corpo,
+		CreatedAt: created_at.Local(),
+		UpdatedAt: updated_at.Local(),
     }    
     
     return *user, err

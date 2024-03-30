@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/eduardospek/go-clean-architecture/domain/entity"
 	_ "github.com/mattn/go-sqlite3"
@@ -34,8 +35,16 @@ func (repo *UserSQLiteRepository) CreateUserTable() error {
     _, err = db.Exec(`CREATE TABLE IF NOT EXISTS users (
         id VARCHAR(36) PRIMARY KEY NOT NULL,
         name VARCHAR(50) NOT NULL,
-        zap VARCHAR(100) NOT NULL
-    )`)
+        zap VARCHAR(100) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE TRIGGER update_users
+	AFTER UPDATE ON users
+	FOR EACH ROW
+	BEGIN
+		UPDATE users SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+	END;`)
     return err
 }
 
@@ -104,14 +113,15 @@ func (repo *UserSQLiteRepository) GetById(id string) (entity.User, error) {
     
     defer db.Close()
 
-    userQuery := "SELECT name, zap FROM users WHERE id = ?"
+    userQuery := "SELECT name, zap, created_at, updated_at FROM users WHERE id = ?"
     row := db.QueryRow(userQuery, id)    
 
     // Variáveis para armazenar os dados do usuário
     var name, zap string
+    var created_at, updated_at time.Time
 
     // Recuperando os valores do banco de dados
-    err = row.Scan(&name, &zap)
+    err = row.Scan(&name, &zap, &created_at,  &updated_at)
     if err != nil {        
         // Se não houver usuário correspondente ao ID fornecido, retornar nil
         if err == sql.ErrNoRows {            
@@ -126,6 +136,8 @@ func (repo *UserSQLiteRepository) GetById(id string) (entity.User, error) {
         ID: id,
         Name: name,
         Zap:    zap,
+        CreatedAt: created_at.Local(),
+        UpdatedAt: updated_at.Local(),
     }
     
     return *user, err
@@ -153,10 +165,12 @@ func (repo *UserSQLiteRepository) List() ([]entity.User, error) {
     
     for rows.Next() {
         var user entity.User
-        err := rows.Scan(&user.ID, &user.Name, &user.Zap)
+        err := rows.Scan(&user.ID, &user.Name, &user.Zap, &user.CreatedAt, &user.UpdatedAt)
         if err != nil {            
             return nil, err
         }
+        user.CreatedAt = user.CreatedAt.Local()
+        user.UpdatedAt = user.UpdatedAt.Local()
         users = append(users, user)
     }
     
