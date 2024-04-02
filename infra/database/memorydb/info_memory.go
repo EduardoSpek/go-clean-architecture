@@ -25,6 +25,8 @@ func (repo *InfoMemoryRepository) Create(info entity.Info) (entity.InfoOutput, e
 		Olhos: info.Olhos.String(),
 		Pele: info.Pele.String(),
 		Corpo: info.Corpo.String(),
+		CreatedAt: info.CreatedAt,
+		UpdatedAt: info.UpdatedAt,
 	}
 
 	return newinfo, nil
@@ -55,9 +57,31 @@ func (repo *InfoMemoryRepository) GetById(id string) (entity.InfoOutput, error) 
 			Olhos: info.Olhos.String(),
 			Pele: info.Pele.String(),
 			Corpo: info.Corpo.String(),
+			CreatedAt: info.CreatedAt,
+			UpdatedAt: info.UpdatedAt,
 		}
 		return newinfo, nil
 	}
+	return entity.InfoOutput{}, ErrUserNotFound
+}
+
+func (repo *InfoMemoryRepository) GetByIdUser(id_user string) (entity.InfoOutput, error) {	
+	for _, info := range repo.infos {
+		if id_user == info.Id_user {
+			newinfo := entity.InfoOutput{
+				ID: info.ID,
+				Id_user: info.Id_user,
+				Cabelo: info.Cabelo.String(),
+				Olhos: info.Olhos.String(),
+				Pele: info.Pele.String(),
+				Corpo: info.Corpo.String(),
+				CreatedAt: info.CreatedAt,
+				UpdatedAt: info.UpdatedAt,
+			}
+			return newinfo, nil
+		}
+	}
+
 	return entity.InfoOutput{}, ErrUserNotFound
 }
 

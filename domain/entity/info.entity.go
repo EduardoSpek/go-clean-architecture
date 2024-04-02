@@ -167,8 +167,8 @@ func NewInfo(info InfoInput) (*Info, error) {
 	}
 
 	if info.ID == "" {
-		info.ID = uuid.NewString()
-	}
+		info.ID = uuid.NewString()		
+	}	
 	
 	newinfo := &Info{
 		ID:     info.ID,

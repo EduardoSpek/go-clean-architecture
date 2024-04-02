@@ -7,6 +7,8 @@ import (
 
 type InfoRepo interface {
 	GetById(id string) (entity.InfoOutput, error)
+	GetByIdUser(id string) (entity.InfoOutput, error)
+	Create(info entity.Info) (entity.InfoOutput, error)
 }
 
 type UserInfoInteractor struct {
@@ -19,13 +21,13 @@ func NewUserInfoInteractor(user_repository UserRepository, inforepository InfoRe
 	return &UserInfoInteractor{InfoRepository: inforepository, UserRepository: user_repository}
 }
 
-func (interactor *UserInfoInteractor) Get(id string) (aggregate.UserWithInfo, error) {
-	user, err := interactor.UserRepository.GetById(id)
+func (interactor *UserInfoInteractor) Get(id_user string) (aggregate.UserWithInfo, error) {	
+	user, err := interactor.UserRepository.GetById(id_user)
 	if err != nil {
 		return aggregate.UserWithInfo{}, err
 	}	
 
-	info, err := interactor.InfoRepository.GetById(id)
+	info, err := interactor.InfoRepository.GetByIdUser(id_user)
 	if err != nil {
 		return aggregate.UserWithInfo{}, err
 	}	
