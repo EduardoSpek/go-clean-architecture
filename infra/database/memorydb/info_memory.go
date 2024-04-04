@@ -6,6 +6,8 @@ import (
 	"github.com/eduardospek/go-clean-architecture/domain/entity"
 )
 
+var ErrUserNotFoundInInfo = errors.New("info: usuário não encontrado")
+
 type InfoMemoryRepository struct {
 	infos map[string]entity.Info
 }
@@ -82,7 +84,7 @@ func (repo *InfoMemoryRepository) GetByIdUser(id_user string) (entity.InfoOutput
 		}
 	}
 
-	return entity.InfoOutput{}, ErrUserNotFound
+	return entity.InfoOutput{}, ErrUserNotFoundInInfo
 }
 
 //VALIDATIONS

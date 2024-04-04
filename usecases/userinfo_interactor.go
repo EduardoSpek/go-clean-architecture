@@ -27,10 +27,7 @@ func (interactor *UserInfoInteractor) Get(id_user string) (aggregate.UserWithInf
 		return aggregate.UserWithInfo{}, err
 	}	
 
-	info, err := interactor.InfoRepository.GetByIdUser(id_user)
-	if err != nil {
-		return aggregate.UserWithInfo{}, err
-	}	
+	info, _ := interactor.InfoRepository.GetByIdUser(id_user)
 
 	userinfo := aggregate.NewUserWithInfo(user, info)	
 

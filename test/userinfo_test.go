@@ -1,6 +1,7 @@
 package test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/eduardospek/go-clean-architecture/domain/aggregate"
@@ -108,6 +109,18 @@ func TestUserInfoInteractor(t *testing.T) {
 	
 	if err != nil {
 		t.Errorf("erro NewInfoDB: %s", err)
+	}
+
+	_, err = userinfoInteractor.Get("id-qualquer-para-gerar-erro")	
+
+	if err != nil {
+		
+		esperado := errors.New("usuário não encontrado")
+		
+		if err.Error() != esperado.Error() {
+			t.Errorf("Esperado: %s | Recebido: %s", err, esperado)
+		}
+
 	}
 
 	userinfo, err := userinfoInteractor.Get(newinfo.Id_user)	
