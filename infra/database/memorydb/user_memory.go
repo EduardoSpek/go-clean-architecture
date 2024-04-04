@@ -60,11 +60,11 @@ func (repo *UserMemoryRepository) Delete(id string) error {
 }
 
 //VALIDATIONS
-func (repo *UserMemoryRepository) UserExists(name string) error {
+func (repo *UserMemoryRepository) UserExists(name string) error {	
     for _, user := range repo.users {
-        if user.Name == name {
+        if user.Name == name {			
             return ErrUserExists
         }
-    }
+    }	
     return nil
 }

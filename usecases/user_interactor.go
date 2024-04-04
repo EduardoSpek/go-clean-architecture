@@ -34,8 +34,8 @@ func (interactor *UserInteractor) CreateNewUser(user entity.User) (entity.User, 
 
 	newuser := entity.NewUser(user.Name, user.Zap)
 
-	//Validação para evitar nome e zap vazios
-	err = interactor.UserValidation.UserNameExsits(user.Name)
+	//Verifica se existe usuário com o mesmo name
+	err = interactor.UserValidation.UserNameExists(user.Name)
 	
 	if err != nil {
 		return entity.User{}, err

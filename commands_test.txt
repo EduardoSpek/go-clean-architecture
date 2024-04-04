@@ -1,0 +1,13 @@
+**Execute estes comandos no terminal
+
+//Comando para executar testes no modo verboso
+go test ./... -v
+
+//Comando para executar testes e verificar a cobertura
+go test ./... -cover
+
+//Comando para CRIAR o arquivo de cobertura
+go test ./... -coverprofile c.out
+
+//Comando para abrir o arquivo de cobertura
+go tool cover -html=c.out 

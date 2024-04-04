@@ -53,7 +53,7 @@ func (v *UserValidation) UserExsits(id_user string) error {
 	}
 	return nil
 }
-func (v *UserValidation) UserNameExsits(name string) error {
+func (v *UserValidation) UserNameExists(name string) error {	
 	err := v.UserRepository.UserExists(name)
 	if err != nil {
 		return err
