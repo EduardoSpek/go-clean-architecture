@@ -64,25 +64,18 @@ func (repo *InfoSQLiteRepository) Create(info entity.Info) (entity.InfoOutput, e
 	cabelo := info.Cabelo.String()
 	olhos := info.Olhos.String()
 	pele := info.Pele.String()
-	corpo := info.Corpo.String()
+	corpo := info.Corpo.String()	
  
-    insertQuery := "INSERT INTO info (id, id_user, cabelo, olhos, pele, corpo) VALUES (?, ?, ?, ?, ?, ?)"
-    _, err := db.Exec(insertQuery, info.ID, info.Id_user, cabelo, olhos, pele, corpo)
+    insertQuery := "INSERT INTO info (id, id_user, cabelo, olhos, pele, corpo, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+    _, err := db.Exec(insertQuery, info.ID, info.Id_user, cabelo, olhos, pele, corpo, info.CreatedAt, info.UpdatedAt)	
 
     if err != nil {
 		return entity.InfoOutput{}, err
-	}   
-	
-	infoOutput := entity.InfoOutput {
-		ID: info.ID,
-		Id_user: info.Id_user,
-		Cabelo: info.Cabelo.String(),
-		Olhos: info.Olhos.String(),
-		Pele: info.Pele.String(),
-		Corpo: info.Corpo.String(),
 	}
+	
+	newinfo, err := repo.GetById(info.ID)
     
-    return infoOutput, err
+    return newinfo, err
 }
 
 func (repo *InfoSQLiteRepository) Update(info entity.Info) (entity.InfoOutput, error) {    
@@ -99,18 +92,11 @@ func (repo *InfoSQLiteRepository) Update(info entity.Info) (entity.InfoOutput, e
 
     if err != nil {
 		return entity.InfoOutput{}, err
-	}   
-	
-	infoOutput := entity.InfoOutput {
-		ID: info.ID,
-		Id_user: info.Id_user,
-		Cabelo: info.Cabelo.String(),
-		Olhos: info.Olhos.String(),
-		Pele: info.Pele.String(),
-		Corpo: info.Corpo.String(),
 	}
+
+	newinfo, err := repo.GetById(info.ID)
     
-    return infoOutput, err
+    return newinfo, err
 }
 
 func (repo *InfoSQLiteRepository) GetById(id string) (entity.InfoOutput, error) {

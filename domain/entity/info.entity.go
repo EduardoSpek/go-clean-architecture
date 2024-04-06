@@ -130,6 +130,7 @@ type InfoInput struct {
 	Pele string `json:"pele"`
 	Corpo string `json:"corpo"`
 }
+
 type InfoOutput struct {	
 	ID string `json:"id"`
 	Id_user string `json:"-"`
@@ -141,7 +142,8 @@ type InfoOutput struct {
 	UpdatedAt  time.Time `json:"updated_at"`
 }
 
-func NewInfo(info InfoInput) (*Info, error) {
+func NewInfo(info InfoInput) (*Info, error) {	
+
 	cabelo, err := ParseCabelo(info.Cabelo)
 	
 	if err != nil {
@@ -166,8 +168,12 @@ func NewInfo(info InfoInput) (*Info, error) {
 		return nil, err
 	}
 
+	
+	var isCreated bool = false
+
 	if info.ID == "" {
-		info.ID = uuid.NewString()		
+		info.ID = uuid.NewString()
+		isCreated = true	
 	}	
 	
 	newinfo := &Info{
@@ -177,9 +183,12 @@ func NewInfo(info InfoInput) (*Info, error) {
 		Olhos: olhos,
 		Pele: pele,
 		Corpo: corpo,
-		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 
+	}
+
+	if isCreated {
+		newinfo.CreatedAt = time.Now()
 	}
 
 	return newinfo, nil

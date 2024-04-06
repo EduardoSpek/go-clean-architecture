@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"net/http"
 
 	usecase "github.com/eduardospek/go-clean-architecture/usecases"
@@ -27,14 +26,5 @@ func (c *UserInfoController) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jsonData, err := json.Marshal(userinfo)
-	if err != nil {
-		http.Error(w, "Erro ao serializar para JSON", http.StatusInternalServerError)
-		return
-	}
-
-	// Escrevendo a resposta
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(jsonData)
+	ResponseJson(w, userinfo, http.StatusOK)	
 }

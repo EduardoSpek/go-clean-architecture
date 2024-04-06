@@ -28,8 +28,9 @@ func (controller *UserController) CreateUser(w http.ResponseWriter, r *http.Requ
 		return 
 	}
 	
-	json.NewEncoder(w).Encode(newuser)
+	ResponseJson(w, newuser, http.StatusCreated)
 }
+
 func (controller *UserController) UpdateUser(w http.ResponseWriter, r *http.Request ) {	
 	vars := mux.Vars(r)
 	id := vars["id"]
@@ -46,7 +47,7 @@ func (controller *UserController) UpdateUser(w http.ResponseWriter, r *http.Requ
 		return 
 	}
 	
-	json.NewEncoder(w).Encode(UpdateUser)
+	ResponseJson(w, UpdateUser, http.StatusOK)
 }
 
 func (controller *UserController) GetUser(w http.ResponseWriter, r *http.Request ) {
@@ -60,7 +61,7 @@ func (controller *UserController) GetUser(w http.ResponseWriter, r *http.Request
 		return 
 	}
 	
-	json.NewEncoder(w).Encode(user)
+	ResponseJson(w, user, http.StatusOK)
 }
 
 func (controller *UserController) UserList(w http.ResponseWriter, r *http.Request ) {			
@@ -71,19 +72,30 @@ func (controller *UserController) UserList(w http.ResponseWriter, r *http.Reques
 		return 
 	}
 	
-	json.NewEncoder(w).Encode(users)
+	ResponseJson(w, users, http.StatusOK)
 }
 
 func (controller *UserController) DeleteUser(w http.ResponseWriter, r *http.Request ) {			
 	vars := mux.Vars(r)
 	id := vars["id"]
-	
+
 	err := controller.UserInteractor.DeleteUser(id)
 
+	msg := map[string]any{ 
+		"message": "usuário não encontrado",
+		"error": true,
+	}
+
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		ResponseJson(w, msg, http.StatusOK)
 		return
 	}
-	
-	w.WriteHeader(http.StatusOK)
+
+	msg = map[string]any{ 
+		"message": "usuário deletado com sucesso!",
+		"error": false,
+	}
+
+	ResponseJson(w, msg, http.StatusOK)	
+
 }

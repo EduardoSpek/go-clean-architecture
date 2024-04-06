@@ -29,7 +29,7 @@ func (controller *InfoController) CreateInfo(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	json.NewEncoder(w).Encode(newinfo)
+	ResponseJson(w, newinfo, http.StatusOK)
 }
 
 func (controller *InfoController) UpdateInfo(w http.ResponseWriter, r *http.Request) {
@@ -49,5 +49,6 @@ func (controller *InfoController) UpdateInfo(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	json.NewEncoder(w).Encode(newinfo)
+	ResponseJson(w, newinfo, http.StatusOK)
+
 }
