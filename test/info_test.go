@@ -53,6 +53,94 @@ func TestInfo(t *testing.T) {
 		t.Errorf("Esperado: %s | Recebido: %s", infoInput.Corpo, info.Corpo.String())
 	}
 
+	t.Run("Deve retornar erro para tipo de cabelo inválido", func(t *testing.T) {
+
+		infoInput := entity.InfoInput{
+			Id_user: user.ID,
+			Cabelo: "Encaracolado",
+			Olhos: "Verde",
+			Pele: "Branca",
+			Corpo: "Magra",
+	
+		}
+
+		esperado := "tipo de cabelo inválido: " + infoInput.Cabelo
+		
+		_, err := entity.NewInfo(infoInput)
+	
+		if err.Error() != esperado {
+			t.Errorf("Esperado: %s | Recebido: %s", esperado, err.Error())
+		}
+		
+
+	})
+
+	t.Run("Deve retornar erro para a cor dos solhos inválida", func(t *testing.T) {
+
+		infoInput := entity.InfoInput{
+			Id_user: user.ID,
+			Cabelo: "Cacheado",
+			Olhos: "Vermelho",
+			Pele: "Branca",
+			Corpo: "Magra",
+	
+		}
+
+		esperado := "cor dos olhos inválida: " + infoInput.Olhos
+		
+		_, err := entity.NewInfo(infoInput)
+	
+		if err.Error() != esperado {
+			t.Errorf("Esperado: %s | Recebido: %s", esperado, err.Error())
+		}
+		
+
+	})
+
+	t.Run("Deve retornar erro para a cor de pele inválida", func(t *testing.T) {
+
+		infoInput := entity.InfoInput{
+			Id_user: user.ID,
+			Cabelo: "Cacheado",
+			Olhos: "Preto",
+			Pele: "Amarela",
+			Corpo: "Magra",
+	
+		}
+
+		esperado := "cor de pele inválida: " + infoInput.Pele
+		
+		_, err := entity.NewInfo(infoInput)
+	
+		if err.Error() != esperado {
+			t.Errorf("Esperado: %s | Recebido: %s", esperado, err.Error())
+		}
+		
+
+	})
+
+	t.Run("Deve retornar erro para o tipo de corpo inválido", func(t *testing.T) {
+
+		infoInput := entity.InfoInput{
+			Id_user: user.ID,
+			Cabelo: "Cacheado",
+			Olhos: "Castanho",
+			Pele: "Parda",
+			Corpo: "Obesa",
+	
+		}
+
+		esperado := "tipo de corpo inválido: " + infoInput.Corpo
+		
+		_, err := entity.NewInfo(infoInput)
+	
+		if err.Error() != esperado {
+			t.Errorf("Esperado: %s | Recebido: %s", esperado, err.Error())
+		}
+		
+
+	})
+
 }
 
 func TestInfoInteractor(t *testing.T) {
