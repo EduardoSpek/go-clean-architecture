@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	database "github.com/eduardospek/go-clean-architecture/infra/database/sqlite"
+	database "github.com/eduardospek/go-clean-architecture/infra/database/mysql"
 	"github.com/eduardospek/go-clean-architecture/interfaces/controllers"
 	"github.com/eduardospek/go-clean-architecture/routes"
 	usecase "github.com/eduardospek/go-clean-architecture/usecases"
@@ -23,15 +23,15 @@ func main() {
 	//Carrega as variáveis de ambiente
 	LoadEnv()
 	
-	//userRepo := database.NewUserMysqlRepository()
-	userRepo := database.NewUserSQLiteRepository()		
+	userRepo := database.NewUserMysqlRepository()
+	//userRepo := database.NewUserSQLiteRepository()
 	userValidation := validations.NewUserValidation(userRepo)
 	userInteractor := usecase.NewUserInteractor(userRepo, *userValidation)		
 	userController := controllers.NewUserController(*userInteractor)
 
-	infoRepo := database.NewInfoSQLiteRepository(userRepo)	
+	//infoRepo := database.NewInfoSQLiteRepository(userRepo)
 	infoValidation := validations.NewInfoValidation(infoRepo, userRepo)	
-	//infoRepo := database.NewInfoMysqlRepository()	
+	infoRepo := database.NewInfoMysqlRepository()
 	infoInteractor := usecase.NewInfoInteractor(infoRepo, *infoValidation, *userValidation)	
 	infoController := controllers.NewInfoController(*infoInteractor)
 
